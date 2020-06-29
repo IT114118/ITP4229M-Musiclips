@@ -50,9 +50,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFileName(uri: Uri): String {
+    private fun getFileName(uri: Uri): String {
         var result: String? = null
-        if (uri.getScheme().equals("content")) {
+        if (uri.scheme.equals("content")) {
             val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
             try {
                 if (cursor != null && cursor.moveToFirst()) {
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if (result == null) {
-            result = uri.getPath()
+            result = uri.path
             val cut = result!!.lastIndexOf('/')
             if (cut != null && cut != -1) {
                 result = result!!.substring(cut + 1)
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         return result
     }
 
-    fun uploadMusic(userId: String, fileName: String, stream: InputStream): UploadTask {
+    private fun uploadMusic(userId: String, fileName: String, stream: InputStream): UploadTask {
         val storageRef = FirebaseStorage.getInstance().reference;
         val fileRef = storageRef.child(fileName)
         val mountainImagesRef = storageRef.child("${userId}/${fileName}")
