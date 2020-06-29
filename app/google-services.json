@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "201619047354",
+    "firebase_url": "https://itp4229m-musiclips.firebaseio.com",
+    "project_id": "itp4229m-musiclips",
+    "storage_bucket": "itp4229m-musiclips.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201619047354:android:aed2f16680645b55119383",
+        "android_client_info": {
+          "package_name": "com.example.musiclips"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201619047354-31t8mpckk2v6cgjoalpl6h8o99anavqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuUU9I2Al7ITuAjQ-j0zaHJ5gbM78cI-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201619047354-31t8mpckk2v6cgjoalpl6h8o99anavqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
