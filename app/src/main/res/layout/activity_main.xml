@@ -7,14 +7,34 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
-    <Button android:id="@+id/btn_Upload"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="upload"/>
+        android:orientation="horizontal"
+        android:paddingTop="50dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/icon"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:paddingTop="6dp"
+            android:layout_width="220dp"
+            android:layout_height="70dp"
+            android:src="@drawable/app_name"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/description"
+        android:textSize="18sp"/>
+
+
 
 </LinearLayout>
