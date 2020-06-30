@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">musiclips</string>
     <string name="description">Listen and share music with everyone.</string>
+
+    <string name="or">or</string>
+    <string name="existing_user">Existing user?</string>
+    <string name="login_underline"><u>Log in</u></string>
+    <string name="login">Log in</string>
+    <string name="no_account_yet">No account yet?</string>
+    <string name="sign_up_underline"><u>Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="sign_up_with_email">Sign up with Email</string>
+    <string name="login_with_google">Log in with Google</string>
+    <string name="enter_your_details">Enter your details</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
 </resources>

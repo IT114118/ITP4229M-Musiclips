@@ -12,9 +12,14 @@
         android:layout_height="wrap_content"
         android:text="Hello World!" />
 
-    <Button android:id="@+id/btn_Upload"
+    <Button android:id="@+id/button_Upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="upload"/>
+
+    <Button android:id="@+id/button_Logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(temp button) logout"/>
 
 </LinearLayout>

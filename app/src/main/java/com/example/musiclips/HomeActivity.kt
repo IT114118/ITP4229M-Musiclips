@@ -4,15 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.OpenableColumns
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_home.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
+
 
 class HomeActivity : AppCompatActivity() {
     val UPLOAD_MUSIC_REQUESTCODE : Int = 10
@@ -21,11 +24,16 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        btn_Upload.setOnClickListener {
+        button_Upload.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
             intent.type = "audio/*"
             startActivityForResult(intent, UPLOAD_MUSIC_REQUESTCODE)
+        }
+
+        // temp
+        button_Logout.setOnClickListener {
+            logout()
         }
     }
 
@@ -36,14 +44,13 @@ class HomeActivity : AppCompatActivity() {
             UPLOAD_MUSIC_REQUESTCODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val audioUri = data!!.data!!
-
                     val fileInputStream = if (audioUri.scheme.equals("content")) {
                         contentResolver.openInputStream(audioUri)!!
                     } else {
                         FileInputStream(File(audioUri.getPath()!!))
                     }
 
-                    val uploadTask = uploadMusic("test", getFileName(audioUri), fileInputStream)
+                    uploadMusic("test", getFileName(audioUri), fileInputStream)
                 }
             }
         }
@@ -64,14 +71,14 @@ class HomeActivity : AppCompatActivity() {
         if (result == null) {
             result = uri.path
             val cut = result!!.lastIndexOf('/')
-            if (cut != null && cut != -1) {
-                result = result!!.substring(cut + 1)
+            if (cut != -1) {
+                result = result.substring(cut + 1)
             }
         }
         return result
     }
 
-    private fun uploadMusic(userId: String, fileName: String, stream: InputStream): UploadTask {
+    private fun uploadMusic(userId: String, fileName: String, stream: InputStream) {
         val storageRef = FirebaseStorage.getInstance().reference;
         val fileRef = storageRef.child(fileName)
         val mountainImagesRef = storageRef.child("${userId}/${fileName}")
@@ -79,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
 // While the file names are the same, the references point to different files
         //mountainsRef.name == mountainImagesRef.name // true
         //mountainsRef.path == mountainImagesRef.path // false
-        return fileRef.putStream(stream);
+        fileRef.putStream(stream);
         fileRef.putStream(stream).addOnFailureListener {
             // Handle unsuccessful uploads
 
@@ -87,5 +94,27 @@ class HomeActivity : AppCompatActivity() {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
         }
+    }
+
+    private fun logout() {
+        // Firebase sign out
+        val auth = FirebaseAuth.getInstance()
+        auth.signOut()
+
+        // Google sign out
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        if (account != null) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+            mGoogleSignInClient.signOut()
+        }
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }
