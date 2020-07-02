@@ -2,13 +2,13 @@ package com.example.musiclips
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.musiclips.tools.addRemoveWarningListener
-import com.example.musiclips.tools.getIntentToHomeActivity
-import com.example.musiclips.tools.isValidEmail
+import com.example.musiclips.tools.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.button_Back
 import kotlinx.android.synthetic.main.activity_sign_up.editText_Email
@@ -32,33 +32,32 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
-        editText_Email.setOnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (editText_Email.text.isNotBlank() and !isValidEmail(editText_Email.text)) {
-                    val color = ContextCompat.getColor(applicationContext, R.color.colorRed)
-                    textView_EmailWarn.text = getString(R.string.enter_a_valid_email_address)
-                    editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-                }
-            }
-        }
-
         button_SignUp.setOnClickListener {
-            val displayName = editText_DisplayName.text.toString()
-            val emailAddress = editText_Email.text.toString()
-            val password = editText_Password.text.toString()
-            val confirmPassword = editText_ConfirmPassword.text.toString()
+            val displayNameValid = validateDisplayNameField(this, editText_DisplayName, textView_DisplayNameWarn)
+            val emailValid = validateEmailField(this, editText_Email, textView_EmailWarn)
+            val passwordValid = validatePasswordField(this, editText_Password, textView_PasswordWarn, true)
+            val confirmPasswordValid = if (passwordValid) {
+                if (editText_Password.text.toString() == editText_ConfirmPassword.text.toString()) {
+                    true
+                } else {
+                    val warnText = getString(R.string.the_confirm_password_error)
+                    addWarning(this, editText_ConfirmPassword, textView_ConfirmPasswordWarn, warnText)
+                    false
+                }
+            } else {
+                if (editText_Password.text.isEmpty()) {
+                    val warnText = getString(R.string.this_field_is_required)
+                    addWarning(this, editText_ConfirmPassword, textView_ConfirmPasswordWarn, warnText)
+                }
+                false
+            }
 
-            if (!displayName.isBlank()
-                && !emailAddress.isBlank()
-                && !password.isBlank()
-                && !confirmPassword.isBlank()
-                && password == confirmPassword) {
-
-                auth.createUserWithEmailAndPassword(emailAddress, password)
+            if (displayNameValid && emailValid && passwordValid && confirmPasswordValid) {
+                auth.createUserWithEmailAndPassword(editText_Email.text.toString().trim(), editText_Password.text.toString())
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val profileUpdates = UserProfileChangeRequest.Builder()
-                                .setDisplayName(displayName).build();
+                                .setDisplayName(editText_DisplayName.text.toString()).build();
 
                             auth.currentUser!!.updateProfile(profileUpdates)
                                 .addOnCompleteListener {
@@ -70,12 +69,15 @@ class SignUpActivity : AppCompatActivity() {
                                     }
                                 }
                         } else {
+                            val warnText = getString(R.string.the_email_taken_error)
+                            addWarning(this, editText_Email, textView_EmailWarn, warnText)
                             println("DEBUG: " + task.exception?.localizedMessage)
                         }
                     }
             }
         }
 
+        addWarningListenerEmail(this, editText_Email, textView_EmailWarn, getString(R.string.enter_a_valid_email_address))
         addRemoveWarningListener(this, editText_DisplayName, textView_DisplayNameWarn)
         addRemoveWarningListener(this, editText_Email, textView_EmailWarn)
         addRemoveWarningListener(this, editText_Password, textView_PasswordWarn)

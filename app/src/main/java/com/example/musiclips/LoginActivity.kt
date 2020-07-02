@@ -2,13 +2,9 @@ package com.example.musiclips
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.example.musiclips.tools.addRemoveWarningListener
-import com.example.musiclips.tools.getIntentToHomeActivity
-import com.example.musiclips.tools.isValidEmail
+import com.example.musiclips.tools.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -44,59 +40,29 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        // Set up Log in button listener -> LoginActivity.kt
+        // Set up Log in button listener -> HomeActivity.kt
         button_Login.setOnClickListener {
-            val emailAddress = editText_Email.text
-            val password = editText_Password.text
-            if (emailAddress.isEmpty() or password.isEmpty()) {
-                var color = if (emailAddress.isEmpty()) {
-                    textView_EmailWarn.text = getString(R.string.this_field_is_required)
-                    ContextCompat.getColor(applicationContext, R.color.colorRed)
-                } else {
-                    ContextCompat.getColor(applicationContext, R.color.colorText)
-                }
-                editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            val emailValid = validateEmailField(this, editText_Email, textView_EmailWarn)
+            val passwordValid = validatePasswordField(this, editText_Password, textView_PasswordWarn, false)
 
-                color = if (password.isEmpty()) {
-                    textView_PasswordWarn.text = getString(R.string.this_field_is_required)
-                    ContextCompat.getColor(applicationContext, R.color.colorRed)
-                } else {
-                    ContextCompat.getColor(applicationContext, R.color.colorText)
-                }
-                editText_Password.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-            } else if (!isValidEmail(emailAddress)) {
-                val color = ContextCompat.getColor(applicationContext, R.color.colorRed)
-                textView_EmailWarn.text = getString(R.string.enter_a_valid_email_address)
-                editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-            } else {
-                auth.signInWithEmailAndPassword(
-                    emailAddress.toString(),
-                    password.toString()
-                ).addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
-                        finish()
-                    } else {
-                        AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                            .setTitle(R.string.we_couldnt_log_you_in)
-                            .setMessage(R.string.try_sign_in_again_later)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show()
+            if (emailValid && passwordValid) {
+                auth.signInWithEmailAndPassword(editText_Email.text.toString(), editText_Password.text.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
+                            finish()
+                        } else {
+                            AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                                .setTitle(R.string.we_couldnt_log_you_in)
+                                .setMessage(R.string.try_sign_in_again_later)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
                     }
-                }
             }
         }
 
-        editText_Email.setOnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (editText_Email.text.isNotBlank() and !isValidEmail(editText_Email.text)) {
-                    val color = ContextCompat.getColor(applicationContext, R.color.colorRed)
-                    textView_EmailWarn.text = getString(R.string.enter_a_valid_email_address)
-                    editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-                }
-            }
-        }
-
+        addWarningListenerEmail(this, editText_Email, textView_EmailWarn, getString(R.string.enter_a_valid_email_address))
         addRemoveWarningListener(this, editText_Email, textView_EmailWarn)
         addRemoveWarningListener(this, editText_Password, textView_PasswordWarn)
     }
