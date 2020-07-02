@@ -13,8 +13,13 @@
     <string name="sign_up_with_email">Sign up with Email</string>
     <string name="login_with_google">Log in with Google</string>
     <string name="enter_your_details">Enter your details</string>
+    <string name="display_name">Display name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="Comfirm_password">Comfirm Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="we_couldnt_log_you_in">We couldn\'t log you in.</string>
+    <string name="try_sign_in_again_later">Try sign in again later.</string>
+    <string name="this_field_is_required">This field is required.</string>
+    <string name="enter_a_valid_email_address">Enter a valid email address.</string>
 
 </resources>

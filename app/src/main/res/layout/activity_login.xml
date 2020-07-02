@@ -38,26 +38,46 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
         android:padding="18dp"
         android:autofillHints="@string/email"
         android:hint="@string/email"
         app:backgroundTint="@color/colorText"
         android:inputType="textEmailAddress"
         android:textColor="@color/colorText"
-        android:textColorHint="@color/colorTextHint" />
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
+
+    <TextView android:id="@+id/textView_EmailWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp" />
 
     <EditText android:id="@+id/editText_Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
         android:padding="18dp"
         android:autofillHints="@string/password"
         android:hint="@string/password"
         app:backgroundTint="@color/colorText"
         android:inputType="textPassword"
         android:textColor="@color/colorText"
-        android:textColorHint="@color/colorTextHint" />
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
+
+    <TextView android:id="@+id/textView_PasswordWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp"/>
 
     <Button android:id="@+id/button_Login"
         android:layout_width="300dp"

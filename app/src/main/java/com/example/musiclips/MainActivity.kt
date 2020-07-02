@@ -1,11 +1,11 @@
 package com.example.musiclips
 
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.musiclips.tools.getIntentToHomeActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -35,9 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         // Go to HomeActivity if last login success
         if (auth.currentUser != null) {
-            val displayName = if (auth.currentUser!!.displayName == null) "" else auth.currentUser!!.displayName!!
-            val photoUrl = if (auth.currentUser!!.photoUrl == null) "" else auth.currentUser!!.photoUrl.toString()
-            intentToHomeActivity(displayName, auth.currentUser!!.email!!, photoUrl)
+            startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
+            finish()
         }
 
         // Set up Google button listener
@@ -54,10 +53,6 @@ class MainActivity : AppCompatActivity() {
         textView_Login.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
-
-        btn_test.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -68,38 +63,23 @@ class MainActivity : AppCompatActivity() {
                 val account = GoogleSignIn
                     .getSignedInAccountFromIntent(data)
                     .getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account)
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
+                            finish()
+                        } else {
+                            AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                                .setTitle(R.string.we_couldnt_log_you_in)
+                                .setMessage(R.string.try_sign_in_again_later)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
+                    }
             } catch (e: ApiException) {
                 println("DEBUG: signInResult:failed code=" + e.statusCode)
             }
         }
-    }
-
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val displayName = if (auth.currentUser!!.displayName == null) "" else auth.currentUser!!.displayName!!
-                    val photoUrl = if (auth.currentUser!!.photoUrl == null) "" else auth.currentUser!!.photoUrl.toString()
-                    intentToHomeActivity(displayName, auth.currentUser!!.email!!, photoUrl)
-                } else {
-                    // TODO print error
-                }
-            }
-    }
-
-    private fun intentToHomeActivity(displayName : String, emailAddress: String, imageUrl: String) {
-        val profilePreferences = getSharedPreferences("account", Context.MODE_PRIVATE)
-        profilePreferences.edit()
-            .putString("displayName", displayName)
-            .putString("emailAddress", emailAddress)
-            .putString("imageUrl", imageUrl)
-            .apply()
-
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
     }
 }

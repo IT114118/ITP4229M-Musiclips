@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-
     tools:context=".SignUpActivity">
 
     <LinearLayout
@@ -34,45 +33,97 @@
             android:text="@string/enter_your_details" />
     </LinearLayout>
 
+    <EditText android:id="@+id/editText_DisplayName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
+        android:padding="18dp"
+        android:autofillHints="@string/display_name"
+        android:hint="@string/display_name"
+        app:backgroundTint="@color/colorText"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
+
+    <TextView android:id="@+id/textView_DisplayNameWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp" />
+
     <EditText android:id="@+id/editText_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
         android:padding="18dp"
         android:autofillHints="@string/email"
         android:hint="@string/email"
         app:backgroundTint="@color/colorText"
         android:inputType="textEmailAddress"
         android:textColor="@color/colorText"
-        android:textColorHint="@color/colorTextHint" />
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
+
+    <TextView android:id="@+id/textView_EmailWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp" />
 
     <EditText android:id="@+id/editText_Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
         android:padding="18dp"
         android:autofillHints="@string/password"
         android:hint="@string/password"
         app:backgroundTint="@color/colorText"
         android:inputType="textPassword"
         android:textColor="@color/colorText"
-        android:textColorHint="@color/colorTextHint" />
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
 
-    <EditText android:id="@+id/editText_ComfirmPassword"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
-    android:padding="18dp"
-    android:autofillHints="@string/Comfirm_password"
-    android:hint="@string/Comfirm_password"
-    app:backgroundTint="@color/colorText"
-    android:inputType="textPassword"
-    android:textColor="@color/colorText"
-    android:textColorHint="@color/colorTextHint" />
+    <TextView android:id="@+id/textView_PasswordWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp" />
 
+    <EditText android:id="@+id/editText_ConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="-7dp"
+        android:padding="18dp"
+        android:autofillHints="@string/confirm_password"
+        android:hint="@string/confirm_password"
+        app:backgroundTint="@color/colorText"
+        android:inputType="textPassword"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"
+        android:text="" />
+
+    <TextView android:id="@+id/textView_ConfirmPasswordWarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorRed"
+        android:textSize="13sp" />
 
     <Button android:id="@+id/button_SignUp"
         android:layout_width="300dp"
@@ -84,8 +135,4 @@
         android:text="@string/sign_up"
         android:textStyle="bold"
         android:textAllCaps="false" />
-
-
-
-
 </LinearLayout>

@@ -1,11 +1,15 @@
 package com.example.musiclips
 
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.musiclips.tools.addRemoveWarningListener
+import com.example.musiclips.tools.getIntentToHomeActivity
+import com.example.musiclips.tools.isValidEmail
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -42,21 +46,59 @@ class LoginActivity : AppCompatActivity() {
 
         // Set up Log in button listener -> LoginActivity.kt
         button_Login.setOnClickListener {
-            button_Login.isEnabled = false
-            auth.signInWithEmailAndPassword(
-                editText_Email.text.toString(),
-                editText_Password.text.toString()
-            ).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val displayName = if (auth.currentUser!!.displayName == null) "" else auth.currentUser!!.displayName!!
-                    val photoUrl = if (auth.currentUser!!.photoUrl == null) "" else auth.currentUser!!.photoUrl.toString()
-                    intentToHomeActivity(displayName, auth.currentUser!!.email!!, photoUrl)
+            val emailAddress = editText_Email.text
+            val password = editText_Password.text
+            if (emailAddress.isEmpty() or password.isEmpty()) {
+                var color = if (emailAddress.isEmpty()) {
+                    textView_EmailWarn.text = getString(R.string.this_field_is_required)
+                    ContextCompat.getColor(applicationContext, R.color.colorRed)
                 } else {
-                    button_Login.isEnabled = true
-                    // TODO print error
+                    ContextCompat.getColor(applicationContext, R.color.colorText)
+                }
+                editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+
+                color = if (password.isEmpty()) {
+                    textView_PasswordWarn.text = getString(R.string.this_field_is_required)
+                    ContextCompat.getColor(applicationContext, R.color.colorRed)
+                } else {
+                    ContextCompat.getColor(applicationContext, R.color.colorText)
+                }
+                editText_Password.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            } else if (!isValidEmail(emailAddress)) {
+                val color = ContextCompat.getColor(applicationContext, R.color.colorRed)
+                textView_EmailWarn.text = getString(R.string.enter_a_valid_email_address)
+                editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            } else {
+                auth.signInWithEmailAndPassword(
+                    emailAddress.toString(),
+                    password.toString()
+                ).addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
+                        finish()
+                    } else {
+                        AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                            .setTitle(R.string.we_couldnt_log_you_in)
+                            .setMessage(R.string.try_sign_in_again_later)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show()
+                    }
                 }
             }
         }
+
+        editText_Email.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                if (editText_Email.text.isNotBlank() and !isValidEmail(editText_Email.text)) {
+                    val color = ContextCompat.getColor(applicationContext, R.color.colorRed)
+                    textView_EmailWarn.text = getString(R.string.enter_a_valid_email_address)
+                    editText_Email.background.mutate().setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+                }
+            }
+        }
+
+        addRemoveWarningListener(this, editText_Email, textView_EmailWarn)
+        addRemoveWarningListener(this, editText_Password, textView_PasswordWarn)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,38 +109,24 @@ class LoginActivity : AppCompatActivity() {
                 val account = GoogleSignIn
                     .getSignedInAccountFromIntent(data)
                     .getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account)
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
+                            finish()
+                        } else {
+                            AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                                .setTitle(R.string.we_couldnt_log_you_in)
+                                .setMessage(R.string.try_sign_in_again_later)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                        }
+                    }
+
             } catch (e: ApiException) {
                 println("DEBUG: signInResult:failed code=" + e.statusCode)
             }
         }
-    }
-
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val displayName = if (auth.currentUser!!.displayName == null) "" else auth.currentUser!!.displayName!!
-                    val photoUrl = if (auth.currentUser!!.photoUrl == null) "" else auth.currentUser!!.photoUrl.toString()
-                    intentToHomeActivity(displayName, auth.currentUser!!.email!!, photoUrl)
-                } else {
-                    // TODO print error
-                }
-            }
-    }
-
-    private fun intentToHomeActivity(displayName : String, emailAddress: String, imageUrl: String) {
-        val profilePreferences = getSharedPreferences("account", Context.MODE_PRIVATE)
-        profilePreferences.edit()
-            .putString("displayName", displayName)
-            .putString("emailAddress", emailAddress)
-            .putString("imageUrl", imageUrl)
-            .apply()
-
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
     }
 }
