@@ -7,4 +7,5 @@
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextHint">#CACACA</color>
     <color name="colorTheme">#a308c2</color>
+    <color name="colorRed">#FF2537</color>
 </resources>
