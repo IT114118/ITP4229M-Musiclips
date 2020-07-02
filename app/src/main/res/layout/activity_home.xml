@@ -5,30 +5,35 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".HomeActivity">
-
-    <TextView android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
-    <Button android:id="@+id/button_Upload"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="upload"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".HomeActivity">
 
-    <Button android:id="@+id/button_Logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="(temp button) logout"/>
+        <TextView android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!" />
 
-</LinearLayout>
+        <Button android:id="@+id/button_Upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="upload"/>
+
+        <Button android:id="@+id/button_Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Setting"/>
+
+        <Button android:id="@+id/button_Logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(temp button) logout"/>
+
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:background="#444444"

@@ -16,4 +16,11 @@
     <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
+
+    <style name="circleImageViewStyle" >
+        <item name="cornerFamily">rounded</item>
+        <item name="borderWidth">5dp</item>
+        <item name="color">#FF0000</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

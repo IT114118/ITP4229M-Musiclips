@@ -3,6 +3,7 @@ package com.example.musiclips
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musiclips.tools.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn

@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import androidx.appcompat.app.AppCompatActivity
+import com.example.musiclips.tools.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -19,16 +20,23 @@ import java.io.InputStream
 
 class HomeActivity : AppCompatActivity() {
     val UPLOAD_MUSIC_REQUESTCODE : Int = 10
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        auth = FirebaseAuth.getInstance()
 
         button_Upload.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
             intent.type = "audio/*"
             startActivityForResult(intent, UPLOAD_MUSIC_REQUESTCODE)
+        }
+
+        button_Settings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         // temp
@@ -47,10 +55,10 @@ class HomeActivity : AppCompatActivity() {
                     val fileInputStream = if (audioUri.scheme.equals("content")) {
                         contentResolver.openInputStream(audioUri)!!
                     } else {
-                        FileInputStream(File(audioUri.getPath()!!))
+                        FileInputStream(File(audioUri.path!!))
                     }
 
-                    uploadMusic("test", getFileName(audioUri), fileInputStream)
+                    uploadMusicToFirebaseStorage(auth.currentUser!!, getFileName(audioUri), fileInputStream)
                 }
             }
         }
@@ -76,24 +84,6 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         return result
-    }
-
-    private fun uploadMusic(userId: String, fileName: String, stream: InputStream) {
-        val storageRef = FirebaseStorage.getInstance().reference;
-        val fileRef = storageRef.child(fileName)
-        val mountainImagesRef = storageRef.child("${userId}/${fileName}")
-
-// While the file names are the same, the references point to different files
-        //mountainsRef.name == mountainImagesRef.name // true
-        //mountainsRef.path == mountainImagesRef.path // false
-        fileRef.putStream(stream);
-        fileRef.putStream(stream).addOnFailureListener {
-            // Handle unsuccessful uploads
-
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
-        }
     }
 
     private fun logout() {

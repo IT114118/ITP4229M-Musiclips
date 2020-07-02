@@ -1,14 +1,10 @@
 package com.example.musiclips
 
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.musiclips.tools.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.button_Back
 import kotlinx.android.synthetic.main.activity_sign_up.editText_Email
