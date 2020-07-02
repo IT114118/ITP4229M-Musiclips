@@ -15,5 +15,6 @@
     <string name="enter_your_details">Enter your details</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="Comfirm_password">Comfirm Password</string>
 
 </resources>
