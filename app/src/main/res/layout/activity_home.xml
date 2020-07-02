@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,3 +29,15 @@
         android:text="(temp button) logout"/>
 
 </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:background="#444444"
+        android:id="@+id/navigation_view"
+        android:layout_width="240dp"
+        android:layout_gravity="start"
+        android:layout_height="match_parent"
+        app:itemTextColor="@color/cardview_light_background"
+        app:itemIconTint="#ffffff"
+        app:menu="@menu/menu_sidebaritem" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

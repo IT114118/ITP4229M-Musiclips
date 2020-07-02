@@ -78,7 +78,16 @@
                 android:text="@string/sign_up_with_email"
                 android:textStyle="bold"
                 android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_test"
+                android:text="return text buttom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
+
+
+
     </LinearLayout>
 
     <!-- Login -> Login Activity  -->

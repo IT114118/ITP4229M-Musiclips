@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
         textView_Login.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        btn_test.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
