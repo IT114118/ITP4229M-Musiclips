@@ -1,5 +1,6 @@
 package com.example.musiclips.tools
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -111,4 +112,12 @@ fun validatePasswordField(context: Context, editText: EditText, textView: TextVi
 
 fun isValidEmail(target: CharSequence): Boolean {
     return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+}
+
+fun showServerError(context: Context) {
+    AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+        .setTitle(R.string.we_couldnt_log_you_in)
+        .setMessage(R.string.try_sign_in_again_later)
+        .setPositiveButton(android.R.string.ok, null)
+        .show()
 }

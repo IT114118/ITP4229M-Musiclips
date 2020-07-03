@@ -3,7 +3,6 @@ package com.example.musiclips
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musiclips.tools.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -84,16 +83,12 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
                             finish()
                         } else {
-                            AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                                .setTitle(R.string.we_couldnt_log_you_in)
-                                .setMessage(R.string.try_sign_in_again_later)
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show()
+                            showServerError(this)
                         }
                     }
-
             } catch (e: ApiException) {
                 println("DEBUG: signInResult:failed code=" + e.statusCode)
+                showServerError(this)
             }
         }
     }
