@@ -23,10 +23,6 @@
             android:layout_height="wrap_content"
             android:text="upload"/>
 
-        <Button android:id="@+id/button_Settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Setting"/>
 
         <Button android:id="@+id/button_Logout"
             android:layout_width="match_parent"
@@ -43,6 +39,41 @@
         android:layout_height="match_parent"
         app:itemTextColor="@color/cardview_light_background"
         app:itemIconTint="#ffffff"
-        app:menu="@menu/menu_sidebaritem" />
+        app:menu="@menu/menu_sidebaritem">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+
+            <LinearLayout
+                android:id="@+id/button_Settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/setting"/>
+
+            <TextView
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="-5dp"
+                android:paddingLeft="25dp"
+                android:gravity="center"
+                android:text="Log out" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
