@@ -25,5 +25,6 @@
     <string name="the_display_name_length_error">The display name must be at least 3 characters.</string>
     <string name="the_confirm_password_error">The password doesn\'t match.</string>
     <string name="the_email_taken_error">The email address is already in use by another account.</string>
+    <string name="settings">Settings</string>
 
 </resources>

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "201619047354-dt0b2oj4gkt2rergi9243nskts80u4jq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.musiclips",
+            "certificate_hash": "f1f8056ca7174c46d12803bb61b558e9e0eea7a2"
+          }
+        },
+        {
           "client_id": "201619047354-31t8mpckk2v6cgjoalpl6h8o99anavqr.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -24,14 +24,15 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        // Set up Google Auth
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
         // Set up Google button listener
         button_Google.setOnClickListener {
-            // Set up Google Auth
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
             startActivityForResult(mGoogleSignInClient.signInIntent, RC_SIGN_IN)
         }
 
