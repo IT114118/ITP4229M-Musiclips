@@ -62,7 +62,9 @@
                 android:drawableStart="@drawable/google_icon"
                 android:text="@string/sign_up_with_google"
                 android:textStyle="bold"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +81,10 @@
                 android:paddingEnd="16dp"
                 android:text="@string/sign_up_with_email"
                 android:textStyle="bold"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:clickable="true"
+                android:focusable="true" />
+
         </LinearLayout>
     </LinearLayout>
 

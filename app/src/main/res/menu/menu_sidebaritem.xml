@@ -2,20 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/Songs"
+            android:id="@+id/menu_Home"
             android:icon="@drawable/musical"
             android:title="@string/home"/>
 
         <item
-            android:id="@+id/Album"
+            android:id="@+id/menu_Following"
             android:icon="@drawable/album"
             android:title="@string/following"/>
 
         <item
-            android:id="@+id/Share"
+            android:id="@+id/menu_MyProfile"
             android:icon="@drawable/share"
-            android:title="@string/my_profile"/>
+            android:title="@string/my_music"/>
     </group>
-
-
 </menu>

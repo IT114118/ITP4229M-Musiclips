@@ -14,38 +14,146 @@
         android:paddingTop="20dp">
 
         <ImageButton android:id="@+id/button_Back"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@color/colorBackground"
             android:scaleType="fitCenter"
             android:layout_marginStart="15dp"
             android:padding="6dp"
+            android:paddingTop="20dp"
             android:src="@drawable/back"
             android:contentDescription="@null" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_marginEnd="55dp"
-            android:text="@string/settings" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/settings" />
+
+            <TextView android:id="@+id/textView_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="15dp"
+                android:textSize="15sp"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorTextHint"
+                android:text="@string/logout_underline"
+                tools:ignore="RtlSymmetry" />
+
+        </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView_Avatar"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="20dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorGray"
-        app:shapeAppearanceOverlay="@style/circleImageViewStyle"
-        app:srcCompat="@drawable/icon" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:layout_gravity="center_horizontal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView_Avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorGray"
+                app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+                app:srcCompat="@drawable/icon" />
 
+            <TextView android:id="@+id/textView_DisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Display name"
+                android:layout_gravity="center_horizontal"
+                android:textSize="23sp"/>
+
+            <TextView android:id="@+id/textView_Email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email Address"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorTextHint"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/colorGray"/>
+
+            <LinearLayout android:id="@+id/layout_ChangeDisplayName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_display_name"
+                    android:paddingTop="10dp"
+                    android:paddingStart="25dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView android:id="@+id/textView_DisplayName2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Display name"
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="13sp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="25dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/layout_ChangeAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_avatar"
+                    android:paddingTop="10dp"
+                    android:paddingStart="25dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_avatar_description"
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="13sp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="25dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -38,11 +38,6 @@ class HomeActivity : AppCompatActivity() {
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-
-        // temp
-        button_Logout.setOnClickListener {
-            logout()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,27 +79,5 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         return result
-    }
-
-    private fun logout() {
-        // Firebase sign out
-        val auth = FirebaseAuth.getInstance()
-        auth.signOut()
-
-        // Google sign out
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        if (account != null) {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-            mGoogleSignInClient.signOut()
-        }
-
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
     }
 }
