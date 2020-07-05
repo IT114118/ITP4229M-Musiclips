@@ -68,7 +68,7 @@
                 android:paddingTop="-5dp"
                 android:paddingLeft="25dp"
                 android:gravity="center"
-                android:text="Log out" />
+                android:text="Settings" />
 
             </LinearLayout>
 

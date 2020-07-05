@@ -10,6 +10,10 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-
+        // Set up Back button listener -> MainActivity.kt
+        button_Back.setOnClickListener {
+            onBackPressed()
+            finish()
+        }
     }
 }

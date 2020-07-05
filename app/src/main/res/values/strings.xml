@@ -26,5 +26,8 @@
     <string name="the_confirm_password_error">The password doesn\'t match.</string>
     <string name="the_email_taken_error">The email address is already in use by another account.</string>
     <string name="settings">Settings</string>
+    <string name="home">Home</string>
+    <string name="following">Following</string>
+    <string name="my_profile">My profile</string>
 
 </resources>
