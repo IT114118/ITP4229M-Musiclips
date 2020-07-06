@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         btn_menu.setOnClickListener {
-            drawer.openDrawer(GravityCompat.START )
+            drawer.openDrawer(GravityCompat.START)
         }
 
 
