@@ -10,6 +10,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.musiclips.tools.getFileName
 import com.example.musiclips.tools.uploadMusicToFirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
@@ -59,31 +60,13 @@ class HomeActivity : AppCompatActivity() {
                         FileInputStream(File(audioUri.path!!))
                     }
 
-                    uploadMusicToFirebaseStorage(auth.currentUser!!, getFileName(audioUri), fileInputStream)
+                    uploadMusicToFirebaseStorage(
+                        auth.currentUser!!,
+                        getFileName(contentResolver, audioUri),
+                        fileInputStream
+                    )
                 }
             }
         }
-    }
-
-    private fun getFileName(uri: Uri): String {
-        var result: String? = null
-        if (uri.scheme.equals("content")) {
-            val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
-            } finally {
-                cursor?.close()
-            }
-        }
-        if (result == null) {
-            result = uri.path
-            val cut = result!!.lastIndexOf('/')
-            if (cut != -1) {
-                result = result.substring(cut + 1)
-            }
-        }
-        return result
     }
 }

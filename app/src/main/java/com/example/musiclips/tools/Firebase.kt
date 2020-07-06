@@ -1,26 +1,38 @@
 package com.example.musiclips.tools
 
-import com.google.firebase.auth.FirebaseAuth
+import android.content.ContentResolver
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.AsyncTask
+import android.provider.OpenableColumns
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import java.io.IOException
 import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 fun uploadAvatarToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, stream: InputStream) : UploadTask {
     val storageRef = FirebaseStorage.getInstance().reference
-    val uploadTask = storageRef.child("avatars/${firebaseUser.uid}/${fileName}").putStream(stream)
+    return storageRef.child("avatars/${firebaseUser.uid}/${fileName}").putStream(stream)
+}
 
-            /*
-        .addOnFailureListener {
-
-        }.addOnSuccessListener {
-
-        }*/
-
-    val database = FirebaseDatabase.getInstance().reference;
-    //database.child("users").child(userId).setValue(user)
-    return uploadTask
+fun getBitmapFromURL(src: String?): Bitmap? {
+    return try {
+        val url = URL(src)
+        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.connect()
+        val input: InputStream = connection.inputStream
+        BitmapFactory.decodeStream(input)
+    } catch (e: IOException) {
+        null
+    }
 }
 
 fun uploadMusicToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, stream: InputStream) : UploadTask {
@@ -35,6 +47,39 @@ fun uploadMusicToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, s
         // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
         // ...
     //}
+}
+
+class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
+    init {
+        execute()
+    }
+
+    override fun doInBackground(vararg params: Void?): Void? {
+        handler()
+        return null
+    }
+}
+
+fun getFileName(contentResolver: ContentResolver, uri: Uri): String {
+    var result: String? = null
+    if (uri.scheme.equals("content")) {
+        val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+    if (result == null) {
+        result = uri.path
+        val cut = result!!.lastIndexOf('/')
+        if (cut != -1) {
+            result = result.substring(cut + 1)
+        }
+    }
+    return result
 }
 
 fun getUserMusic(firebaseUser: FirebaseUser) {

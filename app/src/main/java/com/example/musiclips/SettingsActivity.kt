@@ -1,5 +1,6 @@
 package com.example.musiclips
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -9,12 +10,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.musiclips.tools.validateDisplayNameField
+import com.example.musiclips.tools.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.io.File
+import java.io.FileInputStream
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -29,10 +32,24 @@ class SettingsActivity : AppCompatActivity() {
         textView_DisplayName.text = auth.currentUser!!.displayName
         textView_DisplayName2.text = auth.currentUser!!.displayName
         textView_Email.text = auth.currentUser!!.email
+        println("DEBUG: " + auth.currentUser!!.photoUrl)
 
         // Set progress bar color
         progressBar_DisplayName.indeterminateDrawable
             .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN);
+        progressBar_Avatar.indeterminateDrawable
+            .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN);
+
+        if (auth.currentUser!!.photoUrl != null) {
+            DoAsync {
+                val bitmap = getBitmapFromURL(auth.currentUser!!.photoUrl.toString())
+                if (bitmap != null) {
+                    imageView_Avatar.post {
+                        imageView_Avatar.setImageBitmap(bitmap)
+                    }
+                }
+            }
+        }
 
         textView_logout.setOnClickListener { logout() }
         button_Back.setOnClickListener {
@@ -58,7 +75,7 @@ class SettingsActivity : AppCompatActivity() {
                     if (validateDisplayNameField(null, editText, null)) {
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setDisplayName(editText.text.toString())
-                            .build();
+                            .build()
                         progressBar_DisplayName.visibility = View.VISIBLE
                         auth.currentUser!!.updateProfile(profileUpdates)
                             .addOnCompleteListener {
@@ -92,6 +109,56 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            PICK_IMAGE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    layout_ChangeAvatar.isEnabled = false
+
+                    val photoUri = data!!.data!!
+                    val fileInputStream = if (photoUri.scheme.equals("content")) {
+                        contentResolver.openInputStream(photoUri)!!
+                    } else {
+                        FileInputStream(File(photoUri.path!!))
+                    }
+
+                    val uploadTask = uploadAvatarToFirebaseStorage(
+                        auth.currentUser!!,
+                        getFileName(contentResolver, photoUri),
+                        fileInputStream
+                    )
+
+                    uploadTask.addOnSuccessListener {
+                        it.storage.downloadUrl.addOnSuccessListener { uri ->
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setPhotoUri(uri)
+                                .build()
+                            progressBar_Avatar.visibility = View.VISIBLE
+                            auth.currentUser!!.updateProfile(profileUpdates)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        DoAsync {
+                                            val bitmap = getBitmapFromURL(auth.currentUser!!.photoUrl.toString())
+                                            if (bitmap != null) {
+                                                imageView_Avatar.post {
+                                                    imageView_Avatar.setImageBitmap(bitmap)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        println("DEBUG: " + it.exception?.localizedMessage)
+                                    }
+                                    layout_ChangeAvatar.isEnabled = true
+                                    progressBar_Avatar.visibility = View.GONE
+                                }
+                        }
+                    }
+                    .addOnFailureListener {
+                        layout_ChangeAvatar.isEnabled = true
+                    }
+                }
+            }
+        }
     }
 
     private fun logout() {
