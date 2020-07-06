@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="7dp"
+    android:layout_marginStart="7dp"
+    android:layout_marginEnd="7dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView_MusicImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/album1"
+        app:shapeAppearanceOverlay="@style/roundedImageViewStyle"
+        android:contentDescription="@null" />
+
+    <TextView android:id="@+id/textView_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Title"
+        android:textSize="14sp" />
+
+    <TextView android:id="@+id/textView_Desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="12sp"
+        android:textColor="@color/colorTextHint"/>
+
+</LinearLayout>

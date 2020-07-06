@@ -7,13 +7,13 @@
             android:title="@string/home"/>
 
         <item
-            android:id="@+id/menu_Following"
+            android:id="@+id/menu_MyAlbums"
             android:icon="@drawable/album"
-            android:title="@string/following"/>
+            android:title="@string/my_albums"/>
 
         <item
-            android:id="@+id/menu_MyMusic"
+            android:id="@+id/menu_MySongs"
             android:icon="@drawable/share"
-            android:title="@string/my_music"/>
+            android:title="@string/my_songs"/>
     </group>
 </menu>

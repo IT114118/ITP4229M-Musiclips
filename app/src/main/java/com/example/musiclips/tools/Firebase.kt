@@ -49,9 +49,7 @@ fun uploadMusicToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, s
 }
 
 class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-    init {
-        execute()
-    }
+    init { execute() }
 
     override fun doInBackground(vararg params: Void?): Void? {
         handler()

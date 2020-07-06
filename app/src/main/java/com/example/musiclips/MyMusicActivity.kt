@@ -37,12 +37,12 @@ class MyMusicActivity : AppCompatActivity() {
         navigation_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_Home -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                    true
+
                 }
-                else -> false
             }
+
+            drawer_layout.closeDrawer(GravityCompat.START)
+            true
         }
     }
 
