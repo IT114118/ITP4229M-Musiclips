@@ -62,16 +62,20 @@ fun getIntentToHomeActivity(context: Context, firebaseUser: FirebaseUser) : Inte
     return intent
 }
 
-fun validateDisplayNameField(context: Context, editText: EditText, textView: TextView) : Boolean {
+fun validateDisplayNameField(context: Context?, editText: EditText, textView: TextView?) : Boolean {
     if (editText.text.isEmpty()) {
-        val warnText = context.getString(R.string.this_field_is_required)
-        addWarning(context, editText, textView, warnText)
+        if (context != null && textView != null) {
+            val warnText = context.getString(R.string.this_field_is_required)
+            addWarning(context, editText, textView, warnText)
+        }
         return false
     }
 
     if (editText.text.length < 3) {
-        val warnText = context.getString(R.string.the_display_name_length_error)
-        addWarning(context, editText, textView, warnText)
+        if (context != null && textView != null) {
+            val warnText = context.getString(R.string.the_display_name_length_error)
+            addWarning(context, editText, textView, warnText)
+        }
         return false
     }
 

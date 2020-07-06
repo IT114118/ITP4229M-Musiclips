@@ -33,5 +33,7 @@
     <string name="change_display_name">Change Display name</string>
     <string name="change_avatar">Change Avatar</string>
     <string name="change_avatar_description">Change your profile avatar</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
 </resources>

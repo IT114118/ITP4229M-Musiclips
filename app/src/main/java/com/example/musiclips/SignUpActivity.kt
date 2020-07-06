@@ -57,11 +57,11 @@ class SignUpActivity : AppCompatActivity() {
 
                             auth.currentUser!!.updateProfile(profileUpdates)
                                 .addOnCompleteListener {
-                                    if (task.isSuccessful) {
+                                    if (it.isSuccessful) {
                                         startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
                                         finish()
                                     } else {
-                                        println("DEBUG: " + task.exception?.localizedMessage)
+                                        println("DEBUG: " + it.exception?.localizedMessage)
                                     }
                                 }
                         } else {
