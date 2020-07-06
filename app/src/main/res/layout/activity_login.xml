@@ -19,8 +19,8 @@
             android:layout_height="40dp"
             android:background="@color/colorBackground"
             android:scaleType="fitCenter"
-            android:layout_marginStart="15dp"
-            android:padding="6dp"
+            android:layout_marginStart="10dp"
+            android:padding="10dp"
             android:src="@drawable/back"
             android:contentDescription="@null" />
 

@@ -25,10 +25,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
-
-
-
         auth = FirebaseAuth.getInstance()
 
         button_Upload.setOnClickListener {
@@ -42,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
+        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
         btn_menu.setOnClickListener {
             drawer.openDrawer(GravityCompat.START)
         }

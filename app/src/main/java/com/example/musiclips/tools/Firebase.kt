@@ -6,23 +6,23 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.io.InputStream
-/*
+
 fun uploadAvatarToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, stream: InputStream) : UploadTask {
     val storageRef = FirebaseStorage.getInstance().reference
-    val uploadTask = storageRef
-        .child("avatars/${firebaseUser.uid}/${fileName}")
-        .putStream(stream)
+    val uploadTask = storageRef.child("avatars/${firebaseUser.uid}/${fileName}").putStream(stream)
+
+            /*
         .addOnFailureListener {
 
         }.addOnSuccessListener {
 
-        }
+        }*/
 
     val database = FirebaseDatabase.getInstance().reference;
     //database.child("users").child(userId).setValue(user)
     return uploadTask
 }
-*/
+
 fun uploadMusicToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, stream: InputStream) : UploadTask {
     val storageRef = FirebaseStorage.getInstance().reference
     return storageRef.child("storage/${firebaseUser.uid}/music/${fileName}").putStream(stream)
