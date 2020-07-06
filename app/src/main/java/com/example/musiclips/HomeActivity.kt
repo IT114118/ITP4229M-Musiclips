@@ -6,16 +6,15 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.musiclips.tools.*
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.musiclips.tools.uploadMusicToFirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_home.*
 import java.io.File
 import java.io.FileInputStream
-import java.io.InputStream
 
 
 class HomeActivity : AppCompatActivity() {
@@ -25,6 +24,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
+
+
 
         auth = FirebaseAuth.getInstance()
 
@@ -38,6 +41,12 @@ class HomeActivity : AppCompatActivity() {
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
+        btn_menu.setOnClickListener {
+            drawer.openDrawer(GravityCompat.START )
+        }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
