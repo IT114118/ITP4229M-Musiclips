@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeActivity">
+    tools:context=".MyMusicActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,6 +56,11 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/colorGray"/>
+
+        <Button android:id="@+id/button_Upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="upload"/>
 
     </LinearLayout>
 

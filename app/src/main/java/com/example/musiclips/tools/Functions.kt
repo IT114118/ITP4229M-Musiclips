@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import com.example.musiclips.HomeActivity
 import com.example.musiclips.R
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 fun addRemoveWarningListener(context: Context, editText: EditText, textView: TextView) {
     editText.addTextChangedListener(object : TextWatcher {

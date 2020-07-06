@@ -12,7 +12,7 @@
             android:title="@string/following"/>
 
         <item
-            android:id="@+id/menu_MyProfile"
+            android:id="@+id/menu_MyMusic"
             android:icon="@drawable/share"
             android:title="@string/my_music"/>
     </group>
