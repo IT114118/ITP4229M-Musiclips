@@ -15,6 +15,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.io.FileInputStream
@@ -23,22 +26,24 @@ import java.io.FileInputStream
 class SettingsActivity : AppCompatActivity() {
     val PICK_IMAGE : Int = 1
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
+
         textView_DisplayName.text = auth.currentUser!!.displayName
         textView_DisplayName2.text = auth.currentUser!!.displayName
         textView_Email.text = auth.currentUser!!.email
-        println("DEBUG: " + auth.currentUser!!.photoUrl)
 
         // Set progress bar color
         progressBar_DisplayName.indeterminateDrawable
-            .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN);
+            .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN)
         progressBar_Avatar.indeterminateDrawable
-            .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN);
+            .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN)
 
         if (auth.currentUser!!.photoUrl != null) {
             DoAsync {
@@ -47,6 +52,12 @@ class SettingsActivity : AppCompatActivity() {
                     imageView_Avatar.post {
                         imageView_Avatar.setImageBitmap(bitmap)
                     }
+
+                    database
+                        .child("users")
+                        .child(auth.currentUser!!.uid)
+                        .child("photoUrl")
+                        .setValue(auth.currentUser!!.photoUrl.toString())
                 }
             }
         }
@@ -143,6 +154,12 @@ class SettingsActivity : AppCompatActivity() {
                                                 imageView_Avatar.post {
                                                     imageView_Avatar.setImageBitmap(bitmap)
                                                 }
+
+                                                database
+                                                    .child("users")
+                                                    .child(auth.currentUser!!.uid)
+                                                    .child("photoUrl")
+                                                    .setValue(auth.currentUser!!.photoUrl.toString())
                                             }
                                         }
                                     } else {

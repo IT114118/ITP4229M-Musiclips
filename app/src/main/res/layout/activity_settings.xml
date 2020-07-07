@@ -109,6 +109,7 @@
                         android:orientation="vertical"
                         android:clickable="true"
                         android:focusable="true"
+                        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
                         android:background="?attr/selectableItemBackground">
 
                         <TextView
@@ -164,6 +165,7 @@
                         android:orientation="vertical"
                         android:clickable="true"
                         android:focusable="true"
+                        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
                         android:background="?attr/selectableItemBackground">
 
                         <TextView

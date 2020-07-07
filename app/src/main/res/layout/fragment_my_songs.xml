@@ -30,16 +30,24 @@
                 android:textStyle="bold"/>
 
             <Button android:id="@+id/button_Upload"
-                android:layout_width="125dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
                 android:background="@drawable/border_round_full"
                 android:layout_gravity="center_vertical"
                 android:text="@string/upload_song"
-                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:paddingStart="17dp"
+                android:paddingEnd="17dp"
                 android:clickable="true"
                 android:focusable="true" />
 
         </LinearLayout>
+
+        <ProgressBar android:id="@+id/progressBar_LoadSongs"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -47,7 +55,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_MySongs"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingStart="7.5dp"

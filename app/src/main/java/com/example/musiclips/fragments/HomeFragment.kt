@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         //rootView.recyclerView_NewReleases.layoutManager = LinearLayoutManager(activity)
         val models = mutableListOf<MusicModel>()
         for (x in 0..10) {
-            models.add(MusicModel("Title " + x, "descrtipdsffs...", "url...", ""))
+            models.add(MusicModel("Title " + x, "descrtipdsffs...", "url...", "", ""))
         }
 
         rootView.recyclerView_NewReleases.adapter = MusicRecyclerViewAdapter(context!!, models)

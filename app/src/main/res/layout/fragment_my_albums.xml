@@ -6,7 +6,7 @@
     tools:context=".fragments.MyAlbumsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <TextView android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />

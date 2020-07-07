@@ -10,6 +10,7 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">18sp</item>
         <item name="android:actionMenuTextColor">@android:color/white</item>
+        <item name="android:itemBackground">@color/colorGray2</item>
     </style>
 
     <!-- Splash Screen -->

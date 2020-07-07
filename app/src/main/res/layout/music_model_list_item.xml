@@ -6,7 +6,11 @@
     android:orientation="vertical"
     android:layout_marginTop="7dp"
     android:layout_marginStart="7dp"
-    android:layout_marginEnd="7dp">
+    android:layout_marginEnd="7dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+    android:background="?attr/selectableItemBackground">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView_MusicImage"

@@ -81,6 +81,18 @@ fun validateDisplayNameField(context: Context?, editText: EditText, textView: Te
     return true
 }
 
+fun validateSongNameField(context: Context?, editText: EditText, textView: TextView?) : Boolean {
+    if (editText.text.isEmpty()) {
+        if (context != null && textView != null) {
+            val warnText = context.getString(R.string.this_field_is_required)
+            addWarning(context, editText, textView, warnText)
+        }
+        return false
+    }
+
+    return true
+}
+
 fun validateEmailField(context: Context, editText: EditText, textView: TextView) : Boolean {
     if (editText.text.isEmpty()) {
         val warnText = context.getString(R.string.this_field_is_required)

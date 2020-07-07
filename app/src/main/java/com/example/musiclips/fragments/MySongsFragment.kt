@@ -1,22 +1,35 @@
 package com.example.musiclips.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.musiclips.R
 import com.example.musiclips.adapters.SongsRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.getFileName
-import com.example.musiclips.tools.uploadMusicToFirebaseStorage
+import com.example.musiclips.tools.validateSongNameField
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_my_songs.view.*
 import java.io.File
 import java.io.FileInputStream
+import java.util.concurrent.TimeUnit
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +49,7 @@ class MySongsFragment : Fragment() {
 
     val UPLOAD_MUSIC_REQUESTCODE : Int = 10
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +59,7 @@ class MySongsFragment : Fragment() {
         }
 
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
     }
 
     override fun onCreateView(
@@ -52,13 +67,25 @@ class MySongsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_my_songs, container, false)
+        rootView.progressBar_LoadSongs.indeterminateDrawable
+            .setColorFilter(ContextCompat.getColor(context!!, R.color.colorTheme), PorterDuff.Mode.SRC_IN)
 
-        val models = mutableListOf<MusicModel>()
-        for (x in 0..10) {
-            models.add(MusicModel("Title " + x, "descrtipdsffs...", "url...", ""))
-        }
+        database
+            .child("songs")
+            .child(auth.currentUser!!.uid)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val musicModel = mutableListOf<MusicModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                    }
+                    rootView.progressBar_LoadSongs.visibility = View.GONE
+                    rootView.recyclerView_MySongs.adapter = SongsRecyclerViewAdapter(context!!, musicModel)
+                }
+            })
 
-        rootView.recyclerView_MySongs.adapter = SongsRecyclerViewAdapter(context!!, models)
         rootView.button_Upload.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
@@ -78,24 +105,92 @@ class MySongsFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     val contentResolver = activity!!.contentResolver
                     val audioUri = data!!.data!!
-                    val fileInputStream = if (audioUri.scheme.equals("content")) {
+                    val stream = if (audioUri.scheme.equals("content")) {
                         contentResolver.openInputStream(audioUri)!!
                     } else {
                         FileInputStream(File(audioUri.path!!))
                     }
 
-                    /*
-                    val storageRef = FirebaseStorage.getInstance().reference
-                    storageRef
-                        .child("storage/${firebaseUser.uid}/songs/${fileName}")
-                        .putStream(stream)
-                        .
+                    // Get audio time string
+                    val mmr = MediaMetadataRetriever()
+                    mmr.setDataSource(context, audioUri)
+                    val durationStr =
+                        mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                    val millSecond = durationStr.toLong()
+                    val hms = if (TimeUnit.MILLISECONDS.toHours(millSecond) == 0.toLong()) {
+                        String.format(
+                            "%02d:%02d",
+                            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
+                                TimeUnit.MILLISECONDS.toHours(millSecond)
+                            ),
+                            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millSecond)
+                            )
+                        )
+                    } else {
+                        String.format(
+                            "%02d:%02d:%02d",
+                            TimeUnit.MILLISECONDS.toHours(millSecond),
+                            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
+                                TimeUnit.MILLISECONDS.toHours(millSecond)
+                            ),
+                            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millSecond)
+                            )
+                        )
+                    }
+                    println("LENGTH: " + hms)
 
-                    uploadMusicToFirebaseStorage(
-                        auth.currentUser!!,
-                        getFileName(contentResolver, audioUri),
-                        fileInputStream
-                    )*/
+                    val dialogLayout = layoutInflater.inflate(R.layout.alert_dialog_edittext, null)
+                    val editText = dialogLayout.findViewById<EditText>(R.id.editText)
+                    editText.setText("Untitled Song")
+                    editText.setSelection(editText.text.length);
+                    AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                        .setTitle("New song name")
+                        .setView(dialogLayout)
+                        //.setOnCancelListener { layout_ChangeDisplayName.isEnabled = true }
+                        .setNegativeButton(this.getString(R.string.cancel)) { dialog, _ ->
+                            dialog.cancel()
+                            //layout_ChangeDisplayName.isEnabled = true
+                        }
+                        .setPositiveButton("Upload") { _, _ ->
+                            if (validateSongNameField(null, editText, null)) {
+                                //progressBar_DisplayName.visibility = View.VISIBLE
+
+                                //layout_ChangeDisplayName.isEnabled = true
+                                //progressBar_DisplayName.visibility = View.GONE
+
+                                val uid = auth.currentUser!!.uid
+                                val ref = database.child("songs").child(uid).push()
+                                val storageRef = FirebaseStorage.getInstance().reference
+                                storageRef
+                                    .child("songs/${uid}/${ref.key}/${getFileName(contentResolver, audioUri)}")
+                                    .putStream(stream)
+                                    .addOnFailureListener {}
+                                    .addOnSuccessListener {
+                                        it.storage.downloadUrl.addOnSuccessListener { uri ->
+                                            val musicModel = MusicModel(
+                                                editText.text.toString(),
+                                                "Duration: $hms",
+                                                auth.currentUser!!.photoUrl.toString(),
+                                                uri.toString(),
+                                                auth.currentUser!!.uid,
+                                                ref.key!!
+                                            )
+                                            ref.setValue(musicModel)
+                                        }
+                                    }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    getString(R.string.this_field_is_required),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                //layout_ChangeDisplayName.isEnabled = true
+                            }
+
+                        }
+                        .show()
                 }
             }
         }

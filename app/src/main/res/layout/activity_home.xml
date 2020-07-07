@@ -69,7 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="right"
-            android:background="@drawable/upload"/>
+            android:background="@drawable/upload"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

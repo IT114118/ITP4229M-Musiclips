@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout android:id="@+id/linearLayout_SongItem"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_marginTop="7dp"
-    android:layout_marginStart="7dp"
-    android:layout_marginEnd="7dp">
+    android:paddingStart="7dp"
+    android:paddingEnd="7dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+    android:background="?attr/selectableItemBackground">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView_SongImage"
@@ -25,22 +28,45 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView android:id="@+id/textView_Title"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxHeight="35dp"
-            android:text="Title"
-            android:textSize="14sp" />
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-        <TextView android:id="@+id/textView_Desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="17dp"
-            android:text="Description"
-            android:textSize="12sp"
-            android:textColor="@color/colorTextHint"/>
+            <TextView android:id="@+id/textView_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="35dp"
+                android:text="Title"
+                android:textSize="14sp" />
+
+            <TextView android:id="@+id/textView_Desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="17dp"
+                android:text="Description"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextHint"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView_MenuPopUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:cropToPadding="true"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+            app:srcCompat="@drawable/menu_popup" />
 
     </LinearLayout>
 </LinearLayout>
