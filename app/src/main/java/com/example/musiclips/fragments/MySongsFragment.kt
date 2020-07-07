@@ -78,7 +78,7 @@ class MySongsFragment : Fragment() {
                 override fun onCancelled(databaseError: DatabaseError) {}
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val musicModel = mutableListOf<MusicModel>()
-                    snapshot.children.forEach {
+                    snapshot.children.reversed().forEach {
                         musicModel.add(it.getValue(MusicModel::class.java)!!)
                     }
                     if (context != null) {
