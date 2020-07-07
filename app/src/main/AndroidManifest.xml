@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyMusicActivity"></activity>
+        <activity android:name=".activity_playsong"></activity>
+        <activity android:name=".MyMusicActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".SignUpActivity" />
