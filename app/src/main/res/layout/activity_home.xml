@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/colorPrimaryDark">
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btn_menu"
@@ -30,33 +30,46 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
+                android:layout_marginEnd="58dp"
                 android:gravity="center"
-                android:layout_marginEnd="58dp">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="38dp"
                     android:layout_height="38dp"
-                    android:src="@drawable/icon"
                     android:layout_gravity="center"
-                    android:contentDescription="@null" />
+                    android:contentDescription="@null"
+                    android:src="@drawable/icon" />
 
                 <ImageView
-                    android:paddingTop="6dp"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/app_name"
                     android:layout_gravity="center"
-                    android:contentDescription="@null" />
+                    android:contentDescription="@null"
+                    android:paddingTop="6dp"
+                    android:src="@drawable/app_name" />
 
             </LinearLayout>
         </LinearLayout>
 
         <FrameLayout android:id="@+id/frameLayout_Container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="10"/>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="right"
+            android:background="@drawable/upload"/>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -67,6 +80,7 @@
         android:layout_height="match_parent"
         app:itemTextColor="@color/cardview_light_background"
         app:itemIconTint="#ffffff"
+        app:headerLayout="@layout/menu_header"
         app:menu="@menu/menu_sidebaritem">
 
         <LinearLayout
