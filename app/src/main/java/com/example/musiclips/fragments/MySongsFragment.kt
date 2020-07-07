@@ -17,6 +17,8 @@ import com.example.musiclips.R
 import com.example.musiclips.adapters.SongsRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.getFileName
+import com.example.musiclips.tools.getHMSString
+import com.example.musiclips.tools.getUnixTime
 import com.example.musiclips.tools.validateSongNameField
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -29,7 +31,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_my_songs.view.*
 import java.io.File
 import java.io.FileInputStream
-import java.util.concurrent.TimeUnit
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -77,12 +78,14 @@ class MySongsFragment : Fragment() {
                 override fun onCancelled(databaseError: DatabaseError) {}
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val musicModel = mutableListOf<MusicModel>()
-                    val children = snapshot.children
-                    children.forEach {
+                    snapshot.children.forEach {
                         musicModel.add(it.getValue(MusicModel::class.java)!!)
                     }
-                    rootView.progressBar_LoadSongs.visibility = View.GONE
-                    rootView.recyclerView_MySongs.adapter = SongsRecyclerViewAdapter(context!!, musicModel)
+                    if (context != null) {
+                        rootView.progressBar_LoadSongs.visibility = View.GONE
+                        rootView.recyclerView_MySongs.adapter =
+                            SongsRecyclerViewAdapter(context!!, musicModel)
+                    }
                 }
             })
 
@@ -117,49 +120,20 @@ class MySongsFragment : Fragment() {
                     val durationStr =
                         mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                     val millSecond = durationStr.toLong()
-                    val hms = if (TimeUnit.MILLISECONDS.toHours(millSecond) == 0.toLong()) {
-                        String.format(
-                            "%02d:%02d",
-                            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(millSecond)
-                            ),
-                            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millSecond)
-                            )
-                        )
-                    } else {
-                        String.format(
-                            "%02d:%02d:%02d",
-                            TimeUnit.MILLISECONDS.toHours(millSecond),
-                            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(millSecond)
-                            ),
-                            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millSecond)
-                            )
-                        )
-                    }
-                    println("LENGTH: " + hms)
+                    val hms = getHMSString(millSecond)
 
                     val dialogLayout = layoutInflater.inflate(R.layout.alert_dialog_edittext, null)
                     val editText = dialogLayout.findViewById<EditText>(R.id.editText)
-                    editText.setText("Untitled Song")
+                    editText.setText(this.getString(R.string.untitled_song))
                     editText.setSelection(editText.text.length);
                     AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                         .setTitle("New song name")
                         .setView(dialogLayout)
-                        //.setOnCancelListener { layout_ChangeDisplayName.isEnabled = true }
                         .setNegativeButton(this.getString(R.string.cancel)) { dialog, _ ->
                             dialog.cancel()
-                            //layout_ChangeDisplayName.isEnabled = true
                         }
-                        .setPositiveButton("Upload") { _, _ ->
+                        .setPositiveButton(this.getString(R.string.upload)) { _, _ ->
                             if (validateSongNameField(null, editText, null)) {
-                                //progressBar_DisplayName.visibility = View.VISIBLE
-
-                                //layout_ChangeDisplayName.isEnabled = true
-                                //progressBar_DisplayName.visibility = View.GONE
-
                                 val uid = auth.currentUser!!.uid
                                 val ref = database.child("songs").child(uid).push()
                                 val storageRef = FirebaseStorage.getInstance().reference
@@ -171,11 +145,12 @@ class MySongsFragment : Fragment() {
                                         it.storage.downloadUrl.addOnSuccessListener { uri ->
                                             val musicModel = MusicModel(
                                                 editText.text.toString(),
-                                                "Duration: $hms",
+                                                "Duration: $hms • ${auth.currentUser!!.displayName}",
                                                 auth.currentUser!!.photoUrl.toString(),
                                                 uri.toString(),
                                                 auth.currentUser!!.uid,
-                                                ref.key!!
+                                                ref.key!!,
+                                                getUnixTime()
                                             )
                                             ref.setValue(musicModel)
                                         }
@@ -186,7 +161,6 @@ class MySongsFragment : Fragment() {
                                     getString(R.string.this_field_is_required),
                                     Toast.LENGTH_LONG
                                 ).show()
-                                //layout_ChangeDisplayName.isEnabled = true
                             }
 
                         }

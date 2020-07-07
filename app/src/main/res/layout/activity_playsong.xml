@@ -6,50 +6,89 @@
     android:layout_height="match_parent"
     tools:context=".activity_playsong">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/Img_songImage"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:src="@drawable/default_play_icon"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton android:id="@+id/button_Back"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/colorBackground"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:paddingTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/back" />
+    </LinearLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView_SongImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="90dp"
+        android:background="@color/colorGray"
+        android:src="@drawable/icon"
+        app:shapeAppearanceOverlay="@style/roundedImageViewStyle"
+        android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_SongName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Img_songImage"
-        tools:ignore="MissingConstraints" />
-
-    <SeekBar
-        android:id="@+id/seekBar"
+    <TextView android:id="@+id/textView_SongTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:text="Title"
+        android:maxHeight="40dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_SongImage"
+        tools:ignore="MissingConstraints" />
+
+    <SeekBar android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:progressBackgroundTint="#FFFFFF"
         android:maxHeight="5.0dp"
         android:minHeight="5.0dp"
-        android:progressDrawable="@drawable/line"
-        android:thumb="@drawable/ellipse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_SongName" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_SongTitle" />
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="00:00/00:00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar">
+
+        <TextView android:id="@+id/textView_CurrentTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:textSize="14sp"
+            android:text="00:00" />
+
+        <TextView android:id="@+id/textView_Duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:textSize="14sp"
+            android:text="00:00" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -60,30 +99,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBar">
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/playback" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_backward"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+            app:srcCompat="@drawable/rewind" />
 
-        <ImageButton
-            android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_play"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/play" />
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+            app:srcCompat="@drawable/play" />
 
-        <ImageButton
-            android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/next" />
-
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_forward"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+            app:srcCompat="@drawable/forward" />
 
     </LinearLayout>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

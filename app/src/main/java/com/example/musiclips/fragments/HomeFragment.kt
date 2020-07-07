@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import com.example.musiclips.R
 import com.example.musiclips.adapters.MusicRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,12 +29,18 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +54,28 @@ class HomeFragment : Fragment() {
         }
 
         rootView.recyclerView_NewReleases.adapter = MusicRecyclerViewAdapter(context!!, models)
+
+        database
+            .child("songs")
+            .orderByChild("uploadTime")
+            .limitToLast(10)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val musicModel = mutableListOf<MusicModel>()
+                    snapshot.children.forEach { user ->
+                        user.children.forEach {
+                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        }
+                    }
+                    if (context != null) {
+                        musicModel.sortByDescending { it.uploadTime }
+                        //rootView.progressBar_LoadSongs.visibility = View.GONE
+                        rootView.recyclerView_NewSongs.adapter =
+                            MusicRecyclerViewAdapter(context!!, musicModel)
+                    }
+                }
+            })
 
         // Inflate the layout for this fragment
         return rootView

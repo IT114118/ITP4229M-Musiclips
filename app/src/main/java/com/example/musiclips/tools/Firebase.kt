@@ -14,6 +14,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.TimeUnit
 
 
 fun uploadAvatarToFirebaseStorage(firebaseUser: FirebaseUser, fileName: String, stream: InputStream) : UploadTask {
@@ -79,6 +80,31 @@ fun getFileName(contentResolver: ContentResolver, uri: Uri): String {
     return result
 }
 
-fun getUserMusic(firebaseUser: FirebaseUser) {
+fun getHMSString(millSecond: Long) : String {
+    return if (TimeUnit.MILLISECONDS.toHours(millSecond) == 0.toLong()) {
+        String.format(
+            "%02d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
+                TimeUnit.MILLISECONDS.toHours(millSecond)
+            ),
+            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
+                TimeUnit.MILLISECONDS.toMinutes(millSecond)
+            )
+        )
+    } else {
+        String.format(
+            "%02d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(millSecond),
+            TimeUnit.MILLISECONDS.toMinutes(millSecond) - TimeUnit.HOURS.toMinutes(
+                TimeUnit.MILLISECONDS.toHours(millSecond)
+            ),
+            TimeUnit.MILLISECONDS.toSeconds(millSecond) - TimeUnit.MINUTES.toSeconds(
+                TimeUnit.MILLISECONDS.toMinutes(millSecond)
+            )
+        )
+    }
+}
 
+fun getUnixTime() : Long {
+    return System.currentTimeMillis() / 1000L
 }

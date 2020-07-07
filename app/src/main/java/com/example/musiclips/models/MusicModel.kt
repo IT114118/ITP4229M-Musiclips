@@ -6,5 +6,7 @@ class MusicModel(
     val imageUrl: String = "",
     val songsUrl: String = "",
     val authorId: String = "",
-    val itemKey: String = ""
+    val itemKey: String = "",
+    val uploadTime: Long = 0,
+    val views: Int = 0
 )

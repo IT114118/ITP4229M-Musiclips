@@ -1,7 +1,7 @@
 package com.example.musiclips.adapters
 
 import android.content.Context
-import android.graphics.Color
+import android.content.Intent
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musiclips.R
+import com.example.musiclips.activity_playsong
 import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.DoAsync
 import com.example.musiclips.tools.getBitmapFromURL
@@ -53,7 +54,16 @@ class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<Music
             textView_Desc.text = musicModel.desc
 
             linearLayout_SongItem.setOnClickListener {
-                println("TITLE: " + musicModel.title)
+                val intent = Intent(context, activity_playsong::class.java)
+                intent.putExtra("AUTHOR_ID", musicModel.authorId)
+                intent.putExtra("DESC", musicModel.desc)
+                intent.putExtra("IMAGE_URL", musicModel.imageUrl)
+                intent.putExtra("ITEM_KEY", musicModel.itemKey)
+                intent.putExtra("SONG_URL", musicModel.songsUrl)
+                intent.putExtra("TITLE", musicModel.title)
+                intent.putExtra("UPLOAD_TIME", musicModel.uploadTime)
+                intent.putExtra("VIEWS", musicModel.views)
+                startActivity(context, intent, null)
             }
 
             imageView_MenuPopUp.setOnClickListener {

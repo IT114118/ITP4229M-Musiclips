@@ -36,7 +36,9 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="upload_song">Upload song</string>
+    <string name="upload">Upload</string>
     <string name="delete">Delete</string>
+    <string name="untitled_song">Untitled Song</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
