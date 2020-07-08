@@ -71,4 +71,14 @@
 
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_upload"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/upload"
+       />
+
 </FrameLayout>

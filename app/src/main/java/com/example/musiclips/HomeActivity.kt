@@ -60,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.menu_MyAlbums -> setUpFragment(myAlbumsFragment)
 */
                 R.id.menu_MySongs -> {setUpFragment(mySongsFragment)
-                    btn_upload.visibility = View.VISIBLE}
+                    /*btn_upload.visibility = View.VISIBLE*/}
             }
 
             drawer_layout.closeDrawer(GravityCompat.START)
