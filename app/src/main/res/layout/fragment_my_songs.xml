@@ -29,7 +29,7 @@
                 android:fontFamily="monospace"
                 android:textStyle="bold"/>
 
-            <Button android:id="@+id/button_Upload"
+            <!--<Button android:id="@+id/button_Upload"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:background="@drawable/border_round_full"
@@ -40,7 +40,7 @@
                 android:paddingEnd="17dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:visibility="gone"/>
+                android:visibility="gone"/>-->
 
         </LinearLayout>
 
@@ -73,7 +73,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/btn_upload"
+        android:id="@+id/button_Upload"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
