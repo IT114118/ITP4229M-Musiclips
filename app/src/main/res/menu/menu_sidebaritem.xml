@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_Home"
-            android:icon="@drawable/musical"
+            android:icon="@drawable/home"
             android:title="@string/home"/>
 
         <!--<item
@@ -13,7 +13,7 @@
 
         <item
             android:id="@+id/menu_MySongs"
-            android:icon="@drawable/share"
+            android:icon="@drawable/song"
             android:title="@string/my_songs"/>
     </group>
 </menu>
