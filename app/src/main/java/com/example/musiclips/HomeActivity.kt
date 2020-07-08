@@ -3,6 +3,7 @@ package com.example.musiclips
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -47,14 +48,19 @@ class HomeActivity : AppCompatActivity() {
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
             drawer_layout.closeDrawer(GravityCompat.START)
+            btn_upload.visibility = View.GONE
         }
 
         btn_menu.setOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
         navigation_view.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.menu_Home -> setUpFragment(homeFragment)
+                R.id.menu_Home -> {setUpFragment(homeFragment)
+                btn_upload.visibility = View.GONE}
+/*
                 R.id.menu_MyAlbums -> setUpFragment(myAlbumsFragment)
-                R.id.menu_MySongs -> setUpFragment(mySongsFragment)
+*/
+                R.id.menu_MySongs -> {setUpFragment(mySongsFragment)
+                    btn_upload.visibility = View.VISIBLE}
             }
 
             drawer_layout.closeDrawer(GravityCompat.START)

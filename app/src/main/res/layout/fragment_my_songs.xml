@@ -39,9 +39,11 @@
                 android:paddingStart="17dp"
                 android:paddingEnd="17dp"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:visibility="gone"/>
 
         </LinearLayout>
+
 
         <ProgressBar android:id="@+id/progressBar_LoadSongs"
             style="?android:attr/progressBarStyleLarge"
@@ -62,6 +64,11 @@
                 android:paddingEnd="7.5dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+
         </ScrollView>
+
+
+
+
     </LinearLayout>
 </FrameLayout>
