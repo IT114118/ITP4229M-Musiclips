@@ -6,10 +6,10 @@
             android:icon="@drawable/musical"
             android:title="@string/home"/>
 
-        <item
+        <!--<item
             android:id="@+id/menu_MyAlbums"
             android:icon="@drawable/album"
-            android:title="@string/my_albums"/>
+            android:title="@string/my_albums"/>-->
 
         <item
             android:id="@+id/menu_MySongs"
