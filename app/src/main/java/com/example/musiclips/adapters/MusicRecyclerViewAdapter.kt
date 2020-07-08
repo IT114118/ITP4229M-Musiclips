@@ -67,6 +67,9 @@ class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<Music
                     textView_Desc.text = musicModel.desc
                 }
                 1 -> {
+                    textView_Desc.text = musicModel.desc
+                }
+                2 -> {
                     val s = musicModel.desc
                         .substring(musicModel.desc.indexOf("•") + 1)
                         .trim { it <= ' ' }

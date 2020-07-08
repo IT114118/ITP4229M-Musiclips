@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import com.example.musiclips.R
 import com.example.musiclips.adapters.MusicRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
+import com.example.musiclips.tools.getUnixTime
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,19 +49,49 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
-        //rootView.recyclerView_NewReleases.layoutManager = LinearLayoutManager(activity)
-        val models = mutableListOf<MusicModel>()
-        for (x in 0..10) {
-            models.add(MusicModel("Title " + x, "descrtipdsffs...", "url...", "", ""))
+
+        updateRecommended(rootView)
+        updateNewSongs(rootView)
+        updateMostViewed(rootView)
+
+        rootView.refreshLayout_Container.setOnRefreshListener {
+            updateRecommended(rootView)
+            updateNewSongs(rootView)
+            updateMostViewed(rootView)
+            rootView.refreshLayout_Container.isRefreshing = false
         }
 
-        rootView.recyclerView_NewReleases.adapter = MusicRecyclerViewAdapter(context!!, models, 0)
+        // Inflate the layout for this fragment
+        return rootView
+    }
 
-        database
-            .child("songs")
-            .orderByChild("uploadTime")
-            .limitToLast(10)
-            .addValueEventListener(object : ValueEventListener {
+    private fun updateRecommended(view: View) {
+        val newRecommended = database.child("songs").orderByChild("uploadTime").limitToLast(20)
+        newRecommended.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val musicModel = mutableListOf<MusicModel>()
+                snapshot.children.forEach { user ->
+                    user.children.forEach {
+                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                    }
+                }
+                if (context != null) {
+                    musicModel.sortByDescending { it.uploadTime }
+                    musicModel.random(Random((getUnixTime()/1000)))
+
+                    //rootView.progressBar_LoadSongs.visibility = View.GONE
+                    view.recyclerView_Recommended.adapter =
+                        MusicRecyclerViewAdapter(context!!, musicModel, 0)
+                }
+                newRecommended.removeEventListener(this)
+            }
+        })
+    }
+
+    private fun updateNewSongs(view: View) {
+        val newSongs = database.child("songs").orderByChild("uploadTime").limitToLast(10)
+        newSongs.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError) {}
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val musicModel = mutableListOf<MusicModel>()
@@ -71,36 +103,34 @@ class HomeFragment : Fragment() {
                     if (context != null) {
                         musicModel.sortByDescending { it.uploadTime }
                         //rootView.progressBar_LoadSongs.visibility = View.GONE
-                        rootView.recyclerView_NewSongs.adapter =
-                            MusicRecyclerViewAdapter(context!!, musicModel, 0)
-                    }
-                }
-            })
-
-        database
-            .child("songs")
-            .orderByChild("views")
-            .limitToLast(10)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(databaseError: DatabaseError) {}
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val musicModel = mutableListOf<MusicModel>()
-                    snapshot.children.forEach { user ->
-                        user.children.forEach {
-                            musicModel.add(it.getValue(MusicModel::class.java)!!)
-                        }
-                    }
-                    if (context != null) {
-                        musicModel.sortByDescending { it.views }
-                        //rootView.progressBar_LoadSongs.visibility = View.GONE
-                        rootView.recyclerView_MostViewed.adapter =
+                        view.recyclerView_NewSongs.adapter =
                             MusicRecyclerViewAdapter(context!!, musicModel, 1)
                     }
+                    newSongs.removeEventListener(this)
                 }
             })
+    }
 
-        // Inflate the layout for this fragment
-        return rootView
+    private fun updateMostViewed(view: View) {
+        val mostViewed = database.child("songs").orderByChild("views").limitToLast(10)
+        mostViewed.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val musicModel = mutableListOf<MusicModel>()
+                snapshot.children.forEach { user ->
+                    user.children.forEach {
+                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                    }
+                }
+                if (context != null) {
+                    musicModel.sortByDescending { it.views }
+                    //rootView.progressBar_LoadSongs.visibility = View.GONE
+                    view.recyclerView_MostViewed.adapter =
+                        MusicRecyclerViewAdapter(context!!, musicModel, 2)
+                }
+                mostViewed.removeEventListener(this)
+            }
+        })
     }
 
     companion object {
