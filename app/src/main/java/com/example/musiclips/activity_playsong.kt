@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.musiclips.tools.DoAsync
 import com.example.musiclips.tools.getBitmapFromURL
 import com.example.musiclips.tools.getHMSString
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_playsong.*
 
 
@@ -26,8 +28,18 @@ class activity_playsong : AppCompatActivity() {
             val itemKey = extras.getString("ITEM_KEY")
             val songUrl = extras.getString("SONG_URL")
             val title = extras.getString("TITLE")
-            val uploadTime = extras.getString("UPLOAD_TIME")
-            val views = extras.getString("VIEWS")
+            val uploadTime = extras.getLong("UPLOAD_TIME")
+            val views = extras.getInt("VIEWS")
+
+            if (extras.getInt("ADD_VIEW") == 1) {
+                Firebase.database.reference
+                    .child("songs")
+                    .child(authorId.toString())
+                    .child(itemKey.toString())
+                    .child("views")
+                    .setValue(views + 1)
+            }
+
             textView_SongTitle.text = title
 
             DoAsync {

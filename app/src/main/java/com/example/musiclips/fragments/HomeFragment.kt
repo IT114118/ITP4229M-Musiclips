@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
             models.add(MusicModel("Title " + x, "descrtipdsffs...", "url...", "", ""))
         }
 
-        rootView.recyclerView_NewReleases.adapter = MusicRecyclerViewAdapter(context!!, models)
+        rootView.recyclerView_NewReleases.adapter = MusicRecyclerViewAdapter(context!!, models, 0)
 
         database
             .child("songs")
@@ -72,7 +72,29 @@ class HomeFragment : Fragment() {
                         musicModel.sortByDescending { it.uploadTime }
                         //rootView.progressBar_LoadSongs.visibility = View.GONE
                         rootView.recyclerView_NewSongs.adapter =
-                            MusicRecyclerViewAdapter(context!!, musicModel)
+                            MusicRecyclerViewAdapter(context!!, musicModel, 0)
+                    }
+                }
+            })
+
+        database
+            .child("songs")
+            .orderByChild("views")
+            .limitToLast(10)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val musicModel = mutableListOf<MusicModel>()
+                    snapshot.children.forEach { user ->
+                        user.children.forEach {
+                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        }
+                    }
+                    if (context != null) {
+                        musicModel.sortByDescending { it.views }
+                        //rootView.progressBar_LoadSongs.visibility = View.GONE
+                        rootView.recyclerView_MostViewed.adapter =
+                            MusicRecyclerViewAdapter(context!!, musicModel, 1)
                     }
                 }
             })

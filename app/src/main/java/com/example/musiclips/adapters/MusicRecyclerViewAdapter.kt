@@ -16,9 +16,9 @@ import com.example.musiclips.tools.DoAsync
 import com.example.musiclips.tools.getBitmapFromURL
 import com.google.android.material.imageview.ShapeableImageView
 
-class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<MusicModel>) : RecyclerView.Adapter<MusicRecyclerViewAdapter.ViewHolder>() {
+class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<MusicModel>, val type: Int) : RecyclerView.Adapter<MusicRecyclerViewAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(musicModels[position])
+        holder.bind(musicModels[position], type)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +34,7 @@ class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<Music
         private val textView_Title = itemView.findViewById<TextView>(R.id.textView_Title)
         private val textView_Desc = itemView.findViewById<TextView>(R.id.textView_Desc)
 
-        fun bind(musicModel: MusicModel) {
+        fun bind(musicModel: MusicModel, type: Int) {
             DoAsync {
                 val bitmap = getBitmapFromURL(musicModel.imageUrl)
                 if (bitmap != null) {
@@ -55,12 +55,24 @@ class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<Music
                     intent.putExtra("TITLE", musicModel.title)
                     intent.putExtra("UPLOAD_TIME", musicModel.uploadTime)
                     intent.putExtra("VIEWS", musicModel.views)
+                    intent.putExtra("ADD_VIEW", 1)
                     ContextCompat.startActivity(context, intent, null)
                 }
             }
 
             textView_Title.text = musicModel.title
-            textView_Desc.text = musicModel.desc
+
+            when (type) {
+                0 -> {
+                    textView_Desc.text = musicModel.desc
+                }
+                1 -> {
+                    val s = musicModel.desc
+                        .substring(musicModel.desc.indexOf("•") + 1)
+                        .trim { it <= ' ' }
+                    textView_Desc.text = "Views: ${musicModel.views} • $s"
+                }
+            }
         }
     }
 }

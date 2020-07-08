@@ -18,7 +18,8 @@
         android:id="@+id/imageView_MusicImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/album1"
+        android:background="@color/colorGray"
+        android:src="@drawable/icon"
         app:shapeAppearanceOverlay="@style/roundedImageViewStyle"
         android:contentDescription="@null" />
 
