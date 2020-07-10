@@ -1,27 +1,37 @@
 package com.example.musiclips.adapters
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musiclips.HomeActivity
+import com.example.musiclips.MyMusicActivity
 import com.example.musiclips.R
 import com.example.musiclips.activity_playsong
+import com.example.musiclips.fragments.HomeFragment
+import com.example.musiclips.fragments.MySongsFragment
 import com.example.musiclips.models.MusicModel
-import com.example.musiclips.tools.DoAsync
-import com.example.musiclips.tools.getBitmapFromURL
+import com.example.musiclips.tools.*
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<MusicModel>) : RecyclerView.Adapter<SongsRecyclerViewAdapter.ViewHolder>() {
+
+class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<MusicModel>, val fragment: MySongsFragment) : RecyclerView.Adapter<SongsRecyclerViewAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(musicModels[position])
     }
@@ -70,6 +80,47 @@ class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<Music
                 PopupMenu(context, itemView, Gravity.RIGHT).apply {
                     setOnMenuItemClickListener { item ->
                         when (item?.itemId) {
+                            R.id.item_ChangeIcon -> {
+                                val intent = Intent()
+                                intent.putExtra("ITEM_KEY", musicModel.itemKey)
+                                fragment.onActivityResult(
+                                    fragment::SHOW_INPUT_IMAGE.get(),
+                                    Activity.RESULT_OK,
+                                    intent
+                                )
+                                true
+                            }
+                            R.id.item_ChangeTitle -> {
+                                val database = Firebase.database.reference
+                                val dialogLayout = LayoutInflater.from(context).inflate(R.layout.alert_dialog_edittext, null)
+                                val editText = dialogLayout.findViewById<EditText>(R.id.editText)
+                                editText.setText(musicModel.title)
+                                editText.setSelection(editText.text.length);
+                                AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                                    .setTitle(context.getString(R.string.change_song_name))
+                                    .setView(dialogLayout)
+                                    .setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
+                                        dialog.cancel()
+                                    }
+                                    .setPositiveButton(context.getString(R.string.save)) { _, _ ->
+                                        if (validateSongNameField(null, editText, null)) {
+                                            database
+                                                .child("songs")
+                                                .child(musicModel.authorId)
+                                                .child(musicModel.itemKey)
+                                                .child("title")
+                                                .setValue(editText.text.toString())
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                context.getString(R.string.this_field_is_required),
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                    .show()
+                                true
+                            }
                             R.id.item_Delete -> {
                                 val auth = FirebaseAuth.getInstance()
                                 val database = Firebase.database.reference

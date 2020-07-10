@@ -16,10 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.musiclips.R
 import com.example.musiclips.adapters.SongsRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
-import com.example.musiclips.tools.getFileName
-import com.example.musiclips.tools.getHMSString
-import com.example.musiclips.tools.getUnixTime
-import com.example.musiclips.tools.validateSongNameField
+import com.example.musiclips.tools.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -48,7 +45,9 @@ class MySongsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    val UPLOAD_MUSIC_REQUESTCODE : Int = 10
+    val UPLOAD_MUSIC_REQUESTCODE: Int = 10
+    val SHOW_INPUT_IMAGE: Int = 11
+    val CHANGE_ICON_REQUESTCODE: Int = 12
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
@@ -84,7 +83,7 @@ class MySongsFragment : Fragment() {
                     if (context != null) {
                         rootView.progressBar_LoadSongs.visibility = View.GONE
                         rootView.recyclerView_MySongs.adapter =
-                            SongsRecyclerViewAdapter(context!!, musicModel)
+                            SongsRecyclerViewAdapter(context!!, musicModel, this@MySongsFragment)
                     }
                 }
             })
@@ -100,6 +99,7 @@ class MySongsFragment : Fragment() {
         return rootView
     }
 
+    var tempKey: String = ""
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -165,6 +165,46 @@ class MySongsFragment : Fragment() {
 
                         }
                         .show()
+                }
+            }
+            SHOW_INPUT_IMAGE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    tempKey = data!!.extras!!.getString("ITEM_KEY")!!
+                    val intent = Intent()
+                    intent.type = "image/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    startActivityForResult(
+                        Intent.createChooser(intent, "Select Picture"),
+                        CHANGE_ICON_REQUESTCODE
+                    )
+                }
+            }
+            CHANGE_ICON_REQUESTCODE -> {
+                if (resultCode == Activity.RESULT_OK && tempKey.length != 0) {
+                    val photoUri = data!!.data!!
+                    val stream = if (photoUri.scheme.equals("content")) {
+                        context!!.contentResolver.openInputStream(photoUri)!!
+                    } else {
+                        FileInputStream(File(photoUri.path!!))
+                    }
+
+                    val key = tempKey
+                    val uid = auth.currentUser!!.uid
+                    val storageRef = FirebaseStorage.getInstance().reference
+                    storageRef
+                        .child("songs/${uid}/${key}/imageUrl/${getFileName(context!!.contentResolver, photoUri)}")
+                        .putStream(stream)
+                        .addOnFailureListener {}
+                        .addOnSuccessListener {
+                            it.storage.downloadUrl.addOnSuccessListener { uri ->
+                                Firebase.database.reference
+                                    .child("songs")
+                                    .child(uid)
+                                    .child(key)
+                                    .child("imageUrl")
+                                    .setValue(uri.toString())
+                            }
+                        }
                 }
             }
         }
