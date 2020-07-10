@@ -13,15 +13,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musiclips.HomeActivity
-import com.example.musiclips.MyMusicActivity
 import com.example.musiclips.R
 import com.example.musiclips.activity_playsong
-import com.example.musiclips.fragments.HomeFragment
 import com.example.musiclips.fragments.MySongsFragment
 import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.*
@@ -122,13 +117,21 @@ class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<Music
                                 true
                             }
                             R.id.item_Delete -> {
-                                val auth = FirebaseAuth.getInstance()
-                                val database = Firebase.database.reference
-                                database
-                                    .child("songs")
-                                    .child(auth.currentUser!!.uid)
-                                    .child(musicModel.itemKey)
-                                    .removeValue()
+                                AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                                    .setTitle(context.getString(R.string.delete) + " ${musicModel.title}?")
+                                    .setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
+                                        dialog.cancel()
+                                    }
+                                    .setPositiveButton(context.getString(R.string.delete)) { _, _ ->
+                                        val auth = FirebaseAuth.getInstance()
+                                        val database = Firebase.database.reference
+                                        database
+                                            .child("songs")
+                                            .child(auth.currentUser!!.uid)
+                                            .child(musicModel.itemKey)
+                                            .removeValue()
+                                    }
+                                    .show()
                                 true
                             }
                             else -> false

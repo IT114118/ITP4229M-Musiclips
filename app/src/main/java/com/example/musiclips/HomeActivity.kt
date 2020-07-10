@@ -25,8 +25,6 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var myAlbumsFragment: MyAlbumsFragment
     private lateinit var mySongsFragment: MySongsFragment
 
-    val UPLOAD_MUSIC_REQUESTCODE : Int = 10
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -38,29 +36,18 @@ class HomeActivity : AppCompatActivity() {
         mySongsFragment = MySongsFragment.newInstance("", "")
         setUpFragment(homeFragment)
 
-        btn_upload.setOnClickListener {
-            val intent = Intent()
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.type = "audio/*"
-            startActivityForResult(intent, UPLOAD_MUSIC_REQUESTCODE)
-        }
-
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
             drawer_layout.closeDrawer(GravityCompat.START)
-            btn_upload.visibility = View.GONE
         }
 
         btn_menu.setOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
+        navigation_view.setCheckedItem(R.id.menu_Home) // Set default selected menu item
         navigation_view.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.menu_Home -> {setUpFragment(homeFragment)
-                btn_upload.visibility = View.GONE}
-/*
-                R.id.menu_MyAlbums -> setUpFragment(myAlbumsFragment)
-*/
-                R.id.menu_MySongs -> {setUpFragment(mySongsFragment)
-                    /*btn_upload.visibility = View.VISIBLE*/}
+                R.id.menu_Home -> { setUpFragment(homeFragment) }
+                /*R.id.menu_MyAlbums -> setUpFragment(myAlbumsFragment)*/
+                R.id.menu_MySongs -> { setUpFragment(mySongsFragment) }
             }
 
             drawer_layout.closeDrawer(GravityCompat.START)
@@ -75,28 +62,5 @@ class HomeActivity : AppCompatActivity() {
             .addToBackStack(fragment.toString())
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            UPLOAD_MUSIC_REQUESTCODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val audioUri = data!!.data!!
-                    val fileInputStream = if (audioUri.scheme.equals("content")) {
-                        contentResolver.openInputStream(audioUri)!!
-                    } else {
-                        FileInputStream(File(audioUri.path!!))
-                    }
-
-                    uploadMusicToFirebaseStorage(
-                        auth.currentUser!!,
-                        getFileName(contentResolver, audioUri),
-                        fileInputStream
-                    )
-                }
-            }
-        }
     }
 }

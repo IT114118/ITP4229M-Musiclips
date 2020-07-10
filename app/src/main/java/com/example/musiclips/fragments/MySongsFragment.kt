@@ -146,7 +146,8 @@ class MySongsFragment : Fragment() {
                                             val musicModel = MusicModel(
                                                 editText.text.toString(),
                                                 "Duration: $hms • ${auth.currentUser!!.displayName}",
-                                                auth.currentUser!!.photoUrl.toString(),
+                                                "https://firebasestorage.googleapis.com/v0/b/itp4229m-musiclips.appspot.com/o/default%2Ficon.png?alt=media",
+                                                //auth.currentUser!!.photoUrl.toString(),
                                                 uri.toString(),
                                                 auth.currentUser!!.uid,
                                                 ref.key!!,
@@ -189,6 +190,7 @@ class MySongsFragment : Fragment() {
                     }
 
                     val key = tempKey
+                    tempKey = ""
                     val uid = auth.currentUser!!.uid
                     val storageRef = FirebaseStorage.getInstance().reference
                     storageRef
