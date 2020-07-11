@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlin.random.Random
 
@@ -56,13 +57,17 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+        rootView.textView_Following.visibility = View.GONE
+        rootView.recyclerView_Following.visibility = View.GONE
 
         updateRecommended(rootView)
+        updateFollowing(rootView)
         updateNewSongs(rootView)
         updateMostViewed(rootView)
 
         rootView.refreshLayout_Container.setOnRefreshListener {
             updateRecommended(rootView)
+            updateFollowing(rootView)
             updateNewSongs(rootView)
             updateMostViewed(rootView)
             rootView.refreshLayout_Container.isRefreshing = false
@@ -93,6 +98,50 @@ class HomeFragment : Fragment() {
                 newRecommended.removeEventListener(this)
             }
         })
+    }
+
+    private fun updateFollowing(view: View) {
+        database
+            .child("users")
+            .child(auth.currentUser!!.uid)
+            .child("following")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userFollowing = mutableListOf<String>()
+                    snapshot.children.forEach {
+                        userFollowing.add(it.key.toString())
+                    }
+
+                    val newFollowing = database.child("songs").orderByChild("uploadTime")
+                    newFollowing.addValueEventListener(object : ValueEventListener {
+                        override fun onCancelled(databaseError: DatabaseError) {}
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            var musicModel = mutableListOf<MusicModel>()
+                            snapshot.children.forEach { user ->
+                                if (userFollowing.contains(user.key)) {
+                                    user.children.forEach {
+                                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                                    }
+                                }
+                            }
+                            if (context != null && musicModel.size > 0) {
+                                view.textView_Following.visibility = View.VISIBLE
+                                view.recyclerView_Following.visibility = View.VISIBLE
+                                musicModel.sortByDescending { it.uploadTime }
+                                musicModel = musicModel.take(5).toMutableList()
+                                //rootView.progressBar_LoadSongs.visibility = View.GONE
+                                view.recyclerView_Following.adapter =
+                                    MusicRecyclerViewAdapter(context!!, musicModel, 0)
+                            } else {
+                                view.textView_Following.visibility = View.GONE
+                                view.recyclerView_Following.visibility = View.GONE
+                            }
+                            newFollowing.removeEventListener(this)
+                        }
+                    })
+                }
+            })
     }
 
     private fun updateNewSongs(view: View) {

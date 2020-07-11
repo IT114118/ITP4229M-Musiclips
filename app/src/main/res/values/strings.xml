@@ -52,5 +52,8 @@
     <string name="follow">Follow</string>
     <string name="my_profile">My Profile</string>
     <string name="loading">Loading</string>
+    <string name="recommended">Recommended</string>
+    <string name="new_songs">New Songs</string>
+    <string name="most_viewed">Most Viewed</string>
 
 </resources>

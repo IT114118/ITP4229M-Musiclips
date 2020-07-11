@@ -97,6 +97,12 @@ class SettingsActivity : AppCompatActivity() {
                         auth.currentUser!!.updateProfile(profileUpdates)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
+                                    database
+                                        .child("users")
+                                        .child(auth.currentUser!!.uid)
+                                        .child("displayName")
+                                        .setValue(auth.currentUser!!.displayName)
+
                                     textView_DisplayName.text = auth.currentUser!!.displayName
                                     textView_DisplayName2.text = auth.currentUser!!.displayName
                                 } else {
