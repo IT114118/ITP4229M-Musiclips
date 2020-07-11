@@ -57,5 +57,7 @@
     <string name="most_viewed">Most Viewed</string>
     <string name="manage">Manage</string>
     <string name="unfollow">Unfollow</string>
+    <string name="search">Search</string>
+    <string name="accounts">Accounts</string>
 
 </resources>

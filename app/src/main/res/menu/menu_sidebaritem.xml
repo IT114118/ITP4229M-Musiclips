@@ -15,5 +15,10 @@
             android:id="@+id/menu_MySongs"
             android:icon="@drawable/song"
             android:title="@string/my_songs"/>
+
+        <item
+            android:id="@+id/menu_Search"
+            android:icon="@drawable/search"
+            android:title="@string/search"/>
     </group>
 </menu>

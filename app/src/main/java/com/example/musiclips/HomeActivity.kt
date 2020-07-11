@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.musiclips.fragments.HomeFragment
 import com.example.musiclips.fragments.MyAlbumsFragment
 import com.example.musiclips.fragments.MySongsFragment
+import com.example.musiclips.fragments.SearchFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,8 +24,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var homeFragment: HomeFragment
-    private lateinit var myAlbumsFragment: MyAlbumsFragment
     private lateinit var mySongsFragment: MySongsFragment
+    private lateinit var searchFragment: SearchFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +63,7 @@ class HomeActivity : AppCompatActivity() {
         })
 
         homeFragment = HomeFragment.newInstance("", "")
-        myAlbumsFragment = MyAlbumsFragment.newInstance("", "")
+        searchFragment = SearchFragment.newInstance("", "")
         mySongsFragment = MySongsFragment.newInstance("", "")
         setUpFragment(homeFragment)
 
@@ -81,7 +82,7 @@ class HomeActivity : AppCompatActivity() {
         navigation_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_Home -> { setUpFragment(homeFragment) }
-                /*R.id.menu_MyAlbums -> setUpFragment(myAlbumsFragment)*/
+                R.id.menu_Search -> { setUpFragment(searchFragment) }
                 R.id.menu_MySongs -> { setUpFragment(mySongsFragment) }
             }
 
