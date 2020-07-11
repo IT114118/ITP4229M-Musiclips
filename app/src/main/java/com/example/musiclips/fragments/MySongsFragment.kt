@@ -124,10 +124,10 @@ class MySongsFragment : Fragment() {
 
                     val dialogLayout = layoutInflater.inflate(R.layout.alert_dialog_edittext, null)
                     val editText = dialogLayout.findViewById<EditText>(R.id.editText)
-                    editText.setText(this.getString(R.string.untitled_song))
+                    editText.setText(getFileName(contentResolver, audioUri))
                     editText.setSelection(editText.text.length);
                     AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                        .setTitle("New song name")
+                        .setTitle(getString(R.string.new_song_name))
                         .setView(dialogLayout)
                         .setNegativeButton(this.getString(R.string.cancel)) { dialog, _ ->
                             dialog.cancel()

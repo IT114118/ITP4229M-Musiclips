@@ -38,7 +38,7 @@
     <string name="upload_song">Upload song</string>
     <string name="upload">Upload</string>
     <string name="delete">Delete</string>
-    <string name="untitled_song">Untitled Song</string>
+    <string name="new_song_name">New song name</string>
     <string name="change_icon">Change Icon</string>
     <string name="change_song_name">Change Song Name</string>
     <string name="confirm">Confirm</string>

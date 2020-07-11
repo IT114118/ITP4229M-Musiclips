@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.musiclips.fragments.HomeFragment
 import com.example.musiclips.fragments.MyAlbumsFragment
 import com.example.musiclips.fragments.MySongsFragment
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_home.*
 
 
@@ -24,6 +26,18 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         auth = FirebaseAuth.getInstance()
+
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+                println("DEBUG: TOKEN " + token)
+            })
+
 
         homeFragment = HomeFragment.newInstance("", "")
         myAlbumsFragment = MyAlbumsFragment.newInstance("", "")
