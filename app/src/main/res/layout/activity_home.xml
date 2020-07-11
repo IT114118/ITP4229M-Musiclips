@@ -85,9 +85,9 @@
                 android:paddingBottom="16dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/setting"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/profile"
                     android:contentDescription="@null" />
 
                 <TextView
@@ -110,9 +110,9 @@
                 android:paddingBottom="16dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/setting"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/settings"
                     android:contentDescription="@null" />
 
                 <TextView

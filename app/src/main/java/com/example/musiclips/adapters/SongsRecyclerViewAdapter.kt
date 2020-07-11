@@ -22,8 +22,12 @@ import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.*
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_user_profile.*
 
 
 class SongsRecyclerViewAdapter(val context: Context, val musicModels: List<MusicModel>, val fragment: MySongsFragment?) : RecyclerView.Adapter<SongsRecyclerViewAdapter.ViewHolder>() {

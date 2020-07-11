@@ -84,8 +84,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 if (context != null) {
-                    musicModel.sortByDescending { it.uploadTime }
-                    musicModel.random(Random(getUnixTime()))
+                    musicModel.shuffle()//.random(Random(getUnixTime()/1000))
                     musicModel = musicModel.take(5).toMutableList()
                     //rootView.progressBar_LoadSongs.visibility = View.GONE
                     view.recyclerView_Recommended.adapter =
