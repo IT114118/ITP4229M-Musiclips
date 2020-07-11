@@ -36,6 +36,12 @@ class HomeActivity : AppCompatActivity() {
         mySongsFragment = MySongsFragment.newInstance("", "")
         setUpFragment(homeFragment)
 
+        button_MyProfile.setOnClickListener {
+            val intent = Intent(this, UserProfileActivity::class.java)
+            intent.putExtra("AUTHOR_ID", auth.currentUser!!.uid)
+            startActivity(intent)
+        }
+
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
             drawer_layout.closeDrawer(GravityCompat.START)
@@ -53,6 +59,10 @@ class HomeActivity : AppCompatActivity() {
             drawer_layout.closeDrawer(GravityCompat.START)
             true
         }
+
+        //val intent = Intent(this, UserProfileActivity::class.java)
+        //intent.putExtra("AUTHOR_ID", "WDRDcTFenLUvbJN0G1mOzAhTQeJ2")
+        //startActivity(intent)
     }
 
     private fun setUpFragment(fragment: Fragment) {

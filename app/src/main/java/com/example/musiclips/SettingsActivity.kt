@@ -39,6 +39,12 @@ class SettingsActivity : AppCompatActivity() {
         textView_DisplayName2.text = auth.currentUser!!.displayName
         textView_Email.text = auth.currentUser!!.email
 
+        database
+            .child("users")
+            .child(auth.currentUser!!.uid)
+            .child("displayName")
+            .setValue(auth.currentUser!!.displayName.toString())
+
         // Set progress bar color
         progressBar_DisplayName.indeterminateDrawable
             .setColorFilter(ContextCompat.getColor(this, R.color.colorTheme), PorterDuff.Mode.SRC_IN)

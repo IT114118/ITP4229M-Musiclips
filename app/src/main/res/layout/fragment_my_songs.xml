@@ -59,8 +59,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:paddingStart="7.5dp"
-                android:paddingEnd="7.5dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </ScrollView>

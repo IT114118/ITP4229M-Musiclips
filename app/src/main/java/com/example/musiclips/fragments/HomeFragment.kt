@@ -73,11 +73,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateRecommended(view: View) {
-        val newRecommended = database.child("songs").orderByChild("uploadTime").limitToLast(20)
+        val newRecommended = database.child("songs").orderByChild("uploadTime")
         newRecommended.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {}
             override fun onDataChange(snapshot: DataSnapshot) {
-                val musicModel = mutableListOf<MusicModel>()
+                var musicModel = mutableListOf<MusicModel>()
                 snapshot.children.forEach { user ->
                     user.children.forEach {
                         musicModel.add(it.getValue(MusicModel::class.java)!!)
@@ -85,8 +85,8 @@ class HomeFragment : Fragment() {
                 }
                 if (context != null) {
                     musicModel.sortByDescending { it.uploadTime }
-                    musicModel.random(Random(getUnixTime()/1000))
-
+                    musicModel.random(Random(getUnixTime()))
+                    musicModel = musicModel.take(5).toMutableList()
                     //rootView.progressBar_LoadSongs.visibility = View.GONE
                     view.recyclerView_Recommended.adapter =
                         MusicRecyclerViewAdapter(context!!, musicModel, 0)
@@ -97,11 +97,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateNewSongs(view: View) {
-        val newSongs = database.child("songs").orderByChild("uploadTime").limitToLast(10)
+        val newSongs = database.child("songs").orderByChild("uploadTime")
         newSongs.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError) {}
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val musicModel = mutableListOf<MusicModel>()
+                    var musicModel = mutableListOf<MusicModel>()
                     snapshot.children.forEach { user ->
                         user.children.forEach {
                             musicModel.add(it.getValue(MusicModel::class.java)!!)
@@ -109,6 +109,7 @@ class HomeFragment : Fragment() {
                     }
                     if (context != null) {
                         musicModel.sortByDescending { it.uploadTime }
+                        musicModel = musicModel.take(5).toMutableList()
                         //rootView.progressBar_LoadSongs.visibility = View.GONE
                         view.recyclerView_NewSongs.adapter =
                             MusicRecyclerViewAdapter(context!!, musicModel, 1)
@@ -119,11 +120,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateMostViewed(view: View) {
-        val mostViewed = database.child("songs").orderByChild("views").limitToLast(10)
+        val mostViewed = database.child("songs").orderByChild("views")
         mostViewed.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {}
             override fun onDataChange(snapshot: DataSnapshot) {
-                val musicModel = mutableListOf<MusicModel>()
+                var musicModel = mutableListOf<MusicModel>()
                 snapshot.children.forEach { user ->
                     user.children.forEach {
                         musicModel.add(it.getValue(MusicModel::class.java)!!)
@@ -132,6 +133,7 @@ class HomeFragment : Fragment() {
                 if (context != null) {
                     musicModel.sortByDescending { it.views }
                     //rootView.progressBar_LoadSongs.visibility = View.GONE
+                    musicModel = musicModel.take(5).toMutableList()
                     view.recyclerView_MostViewed.adapter =
                         MusicRecyclerViewAdapter(context!!, musicModel, 2)
                 }

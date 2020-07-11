@@ -58,21 +58,6 @@
             android:layout_weight="10">
 
         </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-
-        <ImageButton
-            android:id="@+id/btn_upload"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="20dp"
-            android:layout_gravity="right"
-            android:background="@drawable/upload"
-            android:visibility= "gone"/>
-
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -90,14 +75,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/button_Settings"
+            <LinearLayout android:id="@+id/button_MyProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingBottom="16dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -106,7 +91,31 @@
                     android:contentDescription="@null" />
 
                 <TextView
-                    android:id="@+id/logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="-5dp"
+                    android:paddingStart="25dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/my_profile"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/button_Settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/setting"
+                    android:contentDescription="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="-5dp"

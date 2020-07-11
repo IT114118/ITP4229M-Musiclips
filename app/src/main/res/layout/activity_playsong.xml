@@ -23,6 +23,40 @@
             android:paddingTop="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/back" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <LinearLayout android:id="@+id/button_ViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center|right"
+            android:paddingStart="5dp"
+            android:paddingEnd="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            android:background="?attr/selectableItemBackground">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView_Avatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/colorGray"
+                android:layout_marginEnd="10dp"
+                app:shapeAppearanceOverlay="@style/circleImageViewStyle"
+                app:srcCompat="@drawable/icon" />
+
+            <TextView android:id="@+id/textView_SongAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:maxHeight="40dp"
+                android:text="Author" />
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -38,21 +72,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:id="@+id/textView_SongTitle"
+    <TextView
+        android:id="@+id/textView_SongTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Title"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
         android:maxHeight="40dp"
+        android:text="Title"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_SongImage"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_SongImage" />
+
 
     <SeekBar
         android:id="@+id/seekBar"
@@ -69,7 +105,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_SongTitle"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.339" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,8 +136,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar">
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintVertical_bias="0.542">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_backward"

@@ -1,5 +1,6 @@
 package com.example.musiclips
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.musiclips.tools.DoAsync
 import com.example.musiclips.tools.getBitmapFromURL
 import com.example.musiclips.tools.getHMSString
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_playsong.*
@@ -19,6 +24,9 @@ class activity_playsong : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playsong)
+
+        val auth = FirebaseAuth.getInstance()
+        val database = Firebase.database.reference
 
         val extras = intent.extras
         if (extras != null) {
@@ -39,6 +47,48 @@ class activity_playsong : AppCompatActivity() {
                     .child("views")
                     .setValue(views + 1)
             }
+
+            button_ViewProfile.setOnClickListener {
+                val intent = Intent(this, UserProfileActivity::class.java)
+                intent.putExtra("AUTHOR_ID", authorId)
+                startActivity(intent)
+            }
+
+            database
+                .child("users")
+                .child(authorId.toString())
+                .child("photoUrl")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {}
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val imageUrl = snapshot.value
+                        if (imageUrl != null) {
+                            DoAsync {
+                                val bitmap = getBitmapFromURL(imageUrl.toString())
+                                if (bitmap != null) {
+                                    imageView_Avatar.post {
+                                        imageView_Avatar.setImageBitmap(bitmap)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+
+            textView_SongAuthor.text = ""
+            database
+                .child("users")
+                .child(authorId.toString())
+                .child("displayName")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {}
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val displayName = snapshot.value
+                        if (displayName != null) {
+                            textView_SongAuthor.text = displayName.toString()
+                        }
+                    }
+                })
 
             textView_SongTitle.text = title
 

@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.musiclips.tools.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.button_Back
 import kotlinx.android.synthetic.main.activity_sign_up.editText_Email
@@ -15,12 +18,14 @@ import kotlinx.android.synthetic.main.activity_sign_up.textView_PasswordWarn
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
 
         // Set up Back button listener -> MainActivity.kt
         button_Back.setOnClickListener {
@@ -58,6 +63,18 @@ class SignUpActivity : AppCompatActivity() {
                             auth.currentUser!!.updateProfile(profileUpdates)
                                 .addOnCompleteListener {
                                     if (it.isSuccessful) {
+                                        database
+                                            .child("users")
+                                            .child(auth.currentUser!!.uid)
+                                            .child("displayName")
+                                            .setValue(auth.currentUser!!.displayName.toString())
+
+                                        database
+                                            .child("users")
+                                            .child(auth.currentUser!!.uid)
+                                            .child("photoUrl")
+                                            .setValue("https://firebasestorage.googleapis.com/v0/b/itp4229m-musiclips.appspot.com/o/default%2Ficon.png?alt=media")
+
                                         startActivity(getIntentToHomeActivity(this, auth.currentUser!!))
                                         finish()
                                     } else {
