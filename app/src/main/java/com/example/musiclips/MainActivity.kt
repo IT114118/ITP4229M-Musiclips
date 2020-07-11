@@ -3,6 +3,8 @@ package com.example.musiclips
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.musiclips.adapters.UsersRecyclerViewAdapter
+import com.example.musiclips.models.UserModel
 import com.example.musiclips.tools.getIntentToHomeActivity
 import com.example.musiclips.tools.showServerError
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -10,7 +12,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_manage.*
 
 
 class MainActivity : AppCompatActivity() {

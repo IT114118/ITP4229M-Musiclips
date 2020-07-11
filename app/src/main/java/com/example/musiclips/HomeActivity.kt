@@ -9,14 +9,19 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.musiclips.fragments.HomeFragment
 import com.example.musiclips.fragments.MyAlbumsFragment
 import com.example.musiclips.fragments.MySongsFragment
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_home.*
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
     private lateinit var homeFragment: HomeFragment
     private lateinit var myAlbumsFragment: MyAlbumsFragment
     private lateinit var mySongsFragment: MySongsFragment
@@ -26,18 +31,35 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
 
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    return@OnCompleteListener
+        val displayNameRef = database.child("users")
+            .child(auth.currentUser!!.uid).child("displayName")
+        displayNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.value == null) {
+                    displayNameRef.removeEventListener(this)
+                    if (auth.currentUser!!.displayName != null) {
+                        displayNameRef.setValue(auth.currentUser!!.displayName.toString())
+                    }
                 }
+            }
+        })
 
-                // Get new Instance ID token
-                val token = task.result?.token
-                println("DEBUG: TOKEN " + token)
-            })
-
+        val photoUrlRef = database.child("users")
+            .child(auth.currentUser!!.uid).child("photoUrl")
+        photoUrlRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.value == null) {
+                    photoUrlRef.removeEventListener(this)
+                    if (auth.currentUser!!.photoUrl != null) {
+                        photoUrlRef.setValue(auth.currentUser!!.photoUrl.toString())
+                    }
+                }
+            }
+        })
 
         homeFragment = HomeFragment.newInstance("", "")
         myAlbumsFragment = MyAlbumsFragment.newInstance("", "")
@@ -66,10 +88,6 @@ class HomeActivity : AppCompatActivity() {
             drawer_layout.closeDrawer(GravityCompat.START)
             true
         }
-
-        //val intent = Intent(this, UserProfileActivity::class.java)
-        //intent.putExtra("AUTHOR_ID", "WDRDcTFenLUvbJN0G1mOzAhTQeJ2")
-        //startActivity(intent)
     }
 
     private fun setUpFragment(fragment: Fragment) {

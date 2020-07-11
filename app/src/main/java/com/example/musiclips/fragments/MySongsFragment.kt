@@ -16,7 +16,10 @@ import androidx.fragment.app.Fragment
 import com.example.musiclips.R
 import com.example.musiclips.adapters.SongsRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
-import com.example.musiclips.tools.*
+import com.example.musiclips.tools.getFileName
+import com.example.musiclips.tools.getHMSString
+import com.example.musiclips.tools.getUnixTime
+import com.example.musiclips.tools.validateSongNameField
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -124,8 +127,8 @@ class MySongsFragment : Fragment() {
 
                     val dialogLayout = layoutInflater.inflate(R.layout.alert_dialog_edittext, null)
                     val editText = dialogLayout.findViewById<EditText>(R.id.editText)
-                    editText.setText(getFileName(contentResolver, audioUri))
-                    editText.setSelection(editText.text.length);
+                    editText.setText(getBaseName(getFileName(contentResolver, audioUri)))
+                    editText.setSelection(editText.text.length)
                     AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                         .setTitle(getString(R.string.new_song_name))
                         .setView(dialogLayout)
@@ -209,6 +212,15 @@ class MySongsFragment : Fragment() {
                         }
                 }
             }
+        }
+    }
+
+    fun getBaseName(fileName: String): String {
+        val index = fileName.lastIndexOf('.')
+        return if (index == -1) {
+            fileName
+        } else {
+            fileName.substring(0, index)
         }
     }
 
