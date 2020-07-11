@@ -1,5 +1,6 @@
 package com.example.musiclips
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_user_profile.*
 class UserProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    private var isFollowing: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +38,70 @@ class UserProfileActivity : AppCompatActivity() {
         if (extras != null) {
             val authorId = extras.getString("AUTHOR_ID")!!
             if (authorId == auth.currentUser!!.uid) {
-                button_Follow.visibility = View.GONE
+                button_Follow.text = getString(R.string.manage)
+                button_Follow.setOnClickListener {
+                    startActivity(Intent(this, ManageActivity::class.java))
+                }
+            } else {
+                // Set up Follow button
+                button_Follow.isEnabled = false
+                button_Follow.text = getString(R.string.loading)
+                val followingText = "✔ " + getString(R.string.following)
+                database
+                    .child("users")
+                    .child(auth.currentUser!!.uid)
+                    .child("following")
+                    .child(authorId)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(error: DatabaseError) {}
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val isFollowed = snapshot.value
+                            if (isFollowed == null) {
+                                button_Follow.text = getString(R.string.follow)
+                            } else {
+                                button_Follow.text = followingText
+                            }
+
+                            button_Follow.isEnabled = true
+                            button_Follow.setOnClickListener {
+                                if (button_Follow.text == getString(R.string.follow)) {
+                                    database
+                                        .child("users")
+                                        .child(auth.currentUser!!.uid)
+                                        .child("following")
+                                        .child(authorId)
+                                        .setValue("1")
+
+                                    database
+                                        .child("users")
+                                        .child(authorId)
+                                        .child("followers")
+                                        .child(auth.currentUser!!.uid)
+                                        .setValue("1")
+
+                                    button_Follow.text = followingText
+                                } else {
+                                    database
+                                        .child("users")
+                                        .child(auth.currentUser!!.uid)
+                                        .child("following")
+                                        .child(authorId)
+                                        .removeValue()
+
+                                    database
+                                        .child("users")
+                                        .child(authorId)
+                                        .child("followers")
+                                        .child(auth.currentUser!!.uid)
+                                        .removeValue()
+
+                                    button_Follow.text = getString(R.string.follow)
+                                }
+                            }
+                        }
+                    })
             }
+
 
             // Set avatar
             database
@@ -116,64 +178,6 @@ class UserProfileActivity : AppCompatActivity() {
                     override fun onCancelled(databaseError: DatabaseError) {}
                     override fun onDataChange(snapshot: DataSnapshot) {
                         textView_FollowingCount.text = snapshot.children.count().toString()
-                    }
-                })
-
-            // Set up Follow button
-            button_Follow.isEnabled = false
-            button_Follow.text = getString(R.string.loading)
-            val followingText = "✔ " + getString(R.string.following)
-            database
-                .child("users")
-                .child(auth.currentUser!!.uid)
-                .child("following")
-                .child(authorId)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {}
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val isFollowed = snapshot.value
-                        if (isFollowed == null) {
-                            button_Follow.text = getString(R.string.follow)
-                        } else {
-                            button_Follow.text = followingText
-                        }
-
-                        button_Follow.isEnabled = true
-                        button_Follow.setOnClickListener {
-                            if (button_Follow.text == getString(R.string.follow)) {
-                                database
-                                    .child("users")
-                                    .child(auth.currentUser!!.uid)
-                                    .child("following")
-                                    .child(authorId)
-                                    .setValue("1")
-
-                                database
-                                    .child("users")
-                                    .child(authorId)
-                                    .child("followers")
-                                    .child(auth.currentUser!!.uid)
-                                    .setValue("1")
-
-                                button_Follow.text = followingText
-                            } else {
-                                database
-                                    .child("users")
-                                    .child(auth.currentUser!!.uid)
-                                    .child("following")
-                                    .child(authorId)
-                                    .removeValue()
-
-                                database
-                                    .child("users")
-                                    .child(authorId)
-                                    .child("followers")
-                                    .child(auth.currentUser!!.uid)
-                                    .removeValue()
-
-                                button_Follow.text = getString(R.string.follow)
-                            }
-                        }
                     }
                 })
         }

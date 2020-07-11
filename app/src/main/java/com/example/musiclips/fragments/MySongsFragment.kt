@@ -145,7 +145,7 @@ class MySongsFragment : Fragment() {
                                         it.storage.downloadUrl.addOnSuccessListener { uri ->
                                             val musicModel = MusicModel(
                                                 editText.text.toString(),
-                                                "Duration: $hms • ${auth.currentUser!!.displayName}",
+                                                "$hms • ${auth.currentUser!!.displayName}",
                                                 "https://firebasestorage.googleapis.com/v0/b/itp4229m-musiclips.appspot.com/o/default%2Ficon.png?alt=media",
                                                 //auth.currentUser!!.photoUrl.toString(),
                                                 uri.toString(),

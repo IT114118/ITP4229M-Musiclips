@@ -64,16 +64,13 @@
         </ScrollView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_Upload"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+    <Button android:id="@+id/button_Upload"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|right"
-        android:paddingStart="8.5dp"
-        android:layout_margin="25dp"
-        android:background="@drawable/border_round_full"
+        android:layout_margin="20dp"
+        android:background="@drawable/add"
         android:clickable="true"
-        android:drawableStart="@drawable/upload2"
         android:focusable="true" />
 
 </FrameLayout>

@@ -1,9 +1,7 @@
 package com.example.musiclips
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -11,12 +9,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.musiclips.fragments.HomeFragment
 import com.example.musiclips.fragments.MyAlbumsFragment
 import com.example.musiclips.fragments.MySongsFragment
-import com.example.musiclips.tools.getFileName
-import com.example.musiclips.tools.uploadMusicToFirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
-import java.io.File
-import java.io.FileInputStream
 
 
 class HomeActivity : AppCompatActivity() {
@@ -44,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
 
         button_Settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
-            drawer_layout.closeDrawer(GravityCompat.START)
         }
 
         btn_menu.setOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }

@@ -24,15 +24,19 @@
         android:contentDescription="@null" />
 
     <TextView android:id="@+id/textView_Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="Title"
         android:textSize="14sp" />
 
     <TextView android:id="@+id/textView_Desc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="Description"
         android:textSize="12sp"
         android:textColor="@color/colorTextHint"/>

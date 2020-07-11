@@ -55,5 +55,7 @@
     <string name="recommended">Recommended</string>
     <string name="new_songs">New Songs</string>
     <string name="most_viewed">Most Viewed</string>
+    <string name="manage">Manage</string>
+    <string name="unfollow">Unfollow</string>
 
 </resources>
