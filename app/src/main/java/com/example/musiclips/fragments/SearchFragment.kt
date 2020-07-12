@@ -85,7 +85,9 @@ class SearchFragment : Fragment() {
                                 var musicModels = mutableListOf<MusicModel>()
                                 snapshot.children.forEach { key ->
                                     key.children.forEach {
-                                        musicModels.add(it.getValue(MusicModel::class.java)!!)
+                                        if (it.child("itemKey").value != null) {
+                                            musicModels.add(it.getValue(MusicModel::class.java)!!)
+                                        }
                                     }
                                 }
                                 musicModels = musicModels.filter { it.title.toLowerCase(Locale.ROOT).contains(searchText) }.toMutableList()

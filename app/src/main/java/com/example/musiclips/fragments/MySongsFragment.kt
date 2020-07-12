@@ -82,7 +82,9 @@ class MySongsFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val musicModel = mutableListOf<MusicModel>()
                     snapshot.children.reversed().forEach {
-                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        if (it.child("itemKey").value != null) {
+                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        }
                     }
                     if (context != null) {
                         rootView.progressBar_LoadSongs.visibility = View.GONE

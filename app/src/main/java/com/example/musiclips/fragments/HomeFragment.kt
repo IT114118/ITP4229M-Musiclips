@@ -85,7 +85,9 @@ class HomeFragment : Fragment() {
                 var musicModel = mutableListOf<MusicModel>()
                 snapshot.children.forEach { user ->
                     user.children.forEach {
-                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        if (it.child("itemKey").value != null) {
+                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        }
                     }
                 }
                 if (context != null) {
@@ -121,7 +123,9 @@ class HomeFragment : Fragment() {
                             snapshot.children.forEach { user ->
                                 if (userFollowing.contains(user.key)) {
                                     user.children.forEach {
-                                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                                        if (it.child("itemKey").value != null) {
+                                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                                        }
                                     }
                                 }
                             }
@@ -152,7 +156,9 @@ class HomeFragment : Fragment() {
                     var musicModel = mutableListOf<MusicModel>()
                     snapshot.children.forEach { user ->
                         user.children.forEach {
-                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                            if (it.child("itemKey").value != null) {
+                                musicModel.add(it.getValue(MusicModel::class.java)!!)
+                            }
                         }
                     }
                     if (context != null) {
@@ -175,7 +181,9 @@ class HomeFragment : Fragment() {
                 var musicModel = mutableListOf<MusicModel>()
                 snapshot.children.forEach { user ->
                     user.children.forEach {
-                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        if (it.child("itemKey").value != null) {
+                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                        }
                     }
                 }
                 if (context != null) {

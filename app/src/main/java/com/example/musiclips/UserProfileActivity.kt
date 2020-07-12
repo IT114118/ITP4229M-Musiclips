@@ -3,7 +3,6 @@ package com.example.musiclips
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.example.musiclips.adapters.SongsRecyclerViewAdapter
 import com.example.musiclips.models.MusicModel
 import com.example.musiclips.tools.DoAsync
@@ -150,7 +149,9 @@ class UserProfileActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val musicModel = mutableListOf<MusicModel>()
                         snapshot.children.reversed().forEach {
-                            musicModel.add(it.getValue(MusicModel::class.java)!!)
+                            if (it.child("itemKey").value != null) {
+                                musicModel.add(it.getValue(MusicModel::class.java)!!)
+                            }
                         }
                             //rootView.progressBar_LoadSongs.visibility = View.GONE
                         recyclerView_Songs.adapter =
