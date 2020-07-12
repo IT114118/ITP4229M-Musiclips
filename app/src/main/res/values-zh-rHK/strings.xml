@@ -57,4 +57,5 @@
     <string name="sign_up_underline"><u>註冊</u></string>
     <string name="logout_underline"><u>登出</u></string>
     <string name="views">觀看次數</string>
+    <string name="ai_karaoke">卡拉OK - AI</string>
 </resources>

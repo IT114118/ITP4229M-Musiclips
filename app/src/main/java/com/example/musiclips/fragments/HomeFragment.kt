@@ -64,12 +64,14 @@ class HomeFragment : Fragment() {
         updateFollowing(rootView)
         updateNewSongs(rootView)
         updateMostViewed(rootView)
+        updateKaraokeByAI(rootView)
 
         rootView.refreshLayout_Container.setOnRefreshListener {
             updateRecommended(rootView)
             updateFollowing(rootView)
             updateNewSongs(rootView)
             updateMostViewed(rootView)
+            updateKaraokeByAI(rootView)
             rootView.refreshLayout_Container.isRefreshing = false
         }
 
@@ -194,6 +196,34 @@ class HomeFragment : Fragment() {
                         MusicRecyclerViewAdapter(context!!, musicModel, 2)
                 }
                 mostViewed.removeEventListener(this)
+            }
+        })
+    }
+
+    private fun updateKaraokeByAI(view: View) {
+        view.textView_AI.visibility = View.GONE
+        val botAIId = "T75ES9r0yCbSd5JLY9J6LdymFZW2";
+        val karaokeByAI = database.child("songs").child(botAIId)
+        karaokeByAI.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var musicModel = mutableListOf<MusicModel>()
+                snapshot.children.forEach {
+                    if (it.child("itemKey").value != null) {
+                        musicModel.add(it.getValue(MusicModel::class.java)!!)
+                    }
+                }
+                if (context != null) {
+                    musicModel.sortByDescending { it.uploadTime }
+                    //rootView.progressBar_LoadSongs.visibility = View.GONE
+                    musicModel = musicModel.take(5).toMutableList()
+                    if (musicModel.size > 0) {
+                        view.textView_AI.visibility = View.VISIBLE
+                    }
+                    view.recyclerView_AI.adapter =
+                        MusicRecyclerViewAdapter(context!!, musicModel, 1)
+                }
+                karaokeByAI.removeEventListener(this)
             }
         })
     }

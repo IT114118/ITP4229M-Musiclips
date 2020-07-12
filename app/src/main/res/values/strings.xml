@@ -60,5 +60,6 @@
     <string name="search">Search</string>
     <string name="accounts">Accounts</string>
     <string name="views">Views</string>
+    <string name="ai_karaoke">Karaoke by AI</string>
 
 </resources>
