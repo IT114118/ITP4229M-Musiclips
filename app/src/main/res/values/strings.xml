@@ -44,7 +44,7 @@
     <string name="confirm">Confirm</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="user_profile">User Profile</string>
     <string name="songs">Songs</string>
     <string name="following">Following</string>
@@ -59,5 +59,6 @@
     <string name="unfollow">Unfollow</string>
     <string name="search">Search</string>
     <string name="accounts">Accounts</string>
+    <string name="views">Views</string>
 
 </resources>

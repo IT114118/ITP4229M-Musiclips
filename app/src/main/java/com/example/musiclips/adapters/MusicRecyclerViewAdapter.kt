@@ -73,7 +73,7 @@ class MusicRecyclerViewAdapter(val context: Context, val musicModels: List<Music
                     val s = musicModel.desc
                         .substring(musicModel.desc.indexOf("•") + 1)
                         .trim { it <= ' ' }
-                    textView_Desc.text = "Views: ${musicModel.views} • $s"
+                    textView_Desc.text = "${context.getString(R.string.views)}: ${musicModel.views} • $s"
                 }
             }
         }
